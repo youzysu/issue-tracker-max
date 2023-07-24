@@ -1,4 +1,4 @@
-const designSystem = {
+export default {
   colors: {
     grey50: "#FEFEFE",
     grey100: "#F7F7FC",
@@ -49,5 +49,3 @@ const designSystem = {
     dropShadow: {},
   },
 };
-
-export default designSystem;

@@ -1,7 +1,7 @@
 import Logo from "@components/common/Logo";
+import GlobalStyle from "@styles/GlobalStyle";
+import designSystem from "@styles/designSystem";
 import styled, { ThemeProvider } from "styled-components";
-import GlobalStyle from "styles/GlobalStyle";
-import designSystem from "styles/designSystem";
 
 export default function App() {
   return (

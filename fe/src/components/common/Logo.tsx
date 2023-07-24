@@ -1,4 +1,4 @@
-import logo from "assets/icon/logo.svg";
+import logo from "@assets/icon/logo.svg";
 
 type Props = {
   size?: "large" | "medium";
