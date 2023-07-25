@@ -30,9 +30,9 @@ const radius = {
 };
 
 const border = {
-  default: `1px solid ${colors.grey300}`,
-  icon: `1.6px solid ${colors.grey300}`,
-  dash: `1px dash ${colors.grey300}`,
+  default: `1px solid`,
+  icon: `1.6px solid`,
+  dash: `1px dash`,
 };
 
 const font = {
