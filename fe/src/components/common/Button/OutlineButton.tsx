@@ -1,24 +1,23 @@
 import styled from "styled-components";
-
-import { BaseStyledButton } from "./BaseButton";
+import BaseButton from "./BaseButton";
 import { ButtonProps } from "./Button";
-import { HEIGHT, WIDTH } from "./constants";
+import { SIZE } from "./constants";
 
 export default function OutlineButton(props: ButtonProps) {
-  return <StyledOutlineButton {...props}></StyledOutlineButton>;
+  return <StyledOutlineButton {...props} />;
 }
 
-export const StyledOutlineButton = styled(BaseStyledButton)<ButtonProps>`
-  width: ${({ size }) => size && WIDTH[size]};
-  height: ${({ size }) => size && HEIGHT[size]};
+const StyledOutlineButton = styled(BaseButton)<ButtonProps>`
+  width: ${({ size }) => size && SIZE[size].width};
+  height: ${({ size }) => size && SIZE[size].height};
   border-radius: ${({ theme, size }) =>
     size === "L" ? theme.radius.l : theme.radius.m};
 
-  border: ${({ theme }) =>
-    `${theme.border.default} ${theme.brand.border.default}`};
-  color: ${({ theme }) => theme.brand.text.weak};
+  border: ${({ theme: { border, brand } }) =>
+    `${border.default} ${brand.border.default}`};
+  color: ${({ theme: { brand } }) => brand.text.weak};
 
   & > img {
-    filter: ${({ theme }) => theme.filter.brandTextWeak};
+    filter: ${({ theme: { filter } }) => filter.brandTextWeak};
   }
 `;

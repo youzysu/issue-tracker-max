@@ -1,22 +1,22 @@
 import styled from "styled-components";
-import { BaseStyledButton } from "./BaseButton";
+import BaseButton from "./BaseButton";
 import { ButtonProps } from "./Button";
-import { HEIGHT, WIDTH } from "./constants";
+import { SIZE } from "./constants";
 
 export default function ContainerButton(props: ButtonProps) {
-  return <StyledContainerButton {...props}></StyledContainerButton>;
+  return <StyledContainerButton {...props} />;
 }
 
-export const StyledContainerButton = styled(BaseStyledButton)<ButtonProps>`
-  width: ${({ size }) => size && WIDTH[size]};
-  height: ${({ size }) => size && HEIGHT[size]};
-  border-radius: ${({ theme, size }) =>
-    size === "L" ? theme.radius.l : theme.radius.m};
+const StyledContainerButton = styled(BaseButton)<ButtonProps>`
+  width: ${({ size }) => size && SIZE[size].width};
+  height: ${({ size }) => size && SIZE[size].height};
+  border-radius: ${({ theme: { radius }, size }) =>
+    size === "L" ? radius.l : radius.m};
 
-  background-color: ${({ theme }) => theme.brand.surface.default};
-  color: ${({ theme }) => theme.brand.text.default};
+  background-color: ${({ theme: { brand } }) => brand.surface.default};
+  color: ${({ theme: { brand } }) => brand.text.default};
 
   & > img {
-    filter: ${({ theme }) => theme.filter.brandTextDefault};
+    filter: ${({ theme: { filter } }) => filter.brandTextDefault};
   }
 `;

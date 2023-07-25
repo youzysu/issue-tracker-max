@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { BaseStyledButton } from "./BaseButton";
+import BaseButton from "./BaseButton";
 import { ButtonProps } from "./Button";
 
 export default function GhostButton(props: ButtonProps) {
-  return <StyledGhostButton {...props}></StyledGhostButton>;
+  return <StyledGhostButton {...props} />;
 }
 
-export const StyledGhostButton = styled(BaseStyledButton)<ButtonProps>`
+const StyledGhostButton = styled(BaseButton)<ButtonProps>`
   padding: 0 24px;
 `;

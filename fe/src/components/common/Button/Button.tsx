@@ -10,13 +10,11 @@ export interface ButtonProps
 }
 
 export default function Button(props: ButtonProps) {
-  const buttonVariant = props.variant || "container";
-
   const buttonComponent = {
     container: <ContainerButton {...props} />,
     outline: <OutlineButton {...props} />,
     ghost: <GhostButton {...props} />,
   };
 
-  return buttonComponent[buttonVariant];
+  return buttonComponent[props.variant];
 }

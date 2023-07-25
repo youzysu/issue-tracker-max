@@ -1,11 +1,5 @@
-export const WIDTH = {
-  S: "128px",
-  M: "184px",
-  L: "240px",
-};
-
-export const HEIGHT = {
-  S: "40px",
-  M: "48px",
-  L: "56px",
+export const SIZE = {
+  S: { width: "128px", height: "40px" },
+  M: { width: "184px", height: "48px" },
+  L: { width: "240px", height: "56px" },
 };
