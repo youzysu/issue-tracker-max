@@ -18,5 +18,5 @@ export default function Button(props: ButtonProps) {
     ghost: <GhostButton {...props} />,
   };
 
-  return <div>{buttonComponent[buttonVariant]}</div>;
+  return buttonComponent[buttonVariant];
 }

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { BaseStyledButton } from "./BaseButton";
 import { ButtonProps } from "./Button";
 import { HEIGHT, WIDTH } from "./constants";
 
@@ -8,22 +9,12 @@ export default function ContainerButton(props: ButtonProps) {
   );
 }
 
-const StyledContainerButton = styled.button<ButtonProps>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
+export const StyledContainerButton = styled(BaseStyledButton)<ButtonProps>`
   width: ${({ size }) => size && WIDTH[size]};
   height: ${({ size }) => size && HEIGHT[size]};
-  border-radius: ${({ theme }) => theme.radius.m};
+  border-radius: ${({ theme, size }) =>
+    size === "L" ? theme.radius.L : theme.radius.m};
+
   background-color: ${({ theme }) => theme.brand.surface.default};
   color: ${({ theme }) => theme.brand.text.default};
-  cursor: pointer;
-
-  &:hover {
-    opacity: ${({ theme }) => theme.opacity.hover};
-  }
-  &:disabled {
-    opacity: ${({ theme }) => theme.opacity.disabled};
-  }
 `;
