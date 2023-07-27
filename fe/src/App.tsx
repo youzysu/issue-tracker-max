@@ -1,5 +1,6 @@
 import DropdownIndicator from "@components/Dropdown/DropdownIndicator";
 import Logo from "@components/common/Logo";
+import TextInput from "@components/common/TextInput";
 import GlobalStyle from "@styles/GlobalStyle";
 import { darkMode, lightMode } from "@styles/designSystem";
 import { useState } from "react";
@@ -113,6 +114,19 @@ export default function App() {
               content: "선택한 이슈 닫기",
             },
           ]}
+        />
+      </div>
+      <div style={{ width: "500px" }}>
+        <TextInput
+          variant="tall"
+          name="아이디"
+          helpText="영문 숫자 조합 6자 이상"
+          hasError={false}
+        />
+        <TextInput
+          variant="short"
+          name="설명(선택)"
+          placeholderText="마일스톤에 대한 설명을 입력하세요"
         />
       </div>
     </ThemeProvider>

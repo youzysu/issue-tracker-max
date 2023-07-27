@@ -3,19 +3,19 @@ import styled from "styled-components";
 
 type TextInputProps = {
   name: string;
-  height: 40 | 56;
+  variant: "tall" | "short";
   placeholderText?: string;
   hasError?: boolean;
   helpText?: string;
 };
 
 export default function TextInput(props: TextInputProps) {
-  const { name, height, placeholderText, hasError, helpText } = props;
+  const { name, variant, placeholderText, hasError, helpText } = props;
 
   const [content, setContent] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
-  const isHighHeight = height === 56;
+  const isTallType = variant === "tall";
   const textInputState = isFocused ? "active" : hasError ? "error" : "enabled";
   const typingState = isFocused
     ? "onTyping"
@@ -28,10 +28,10 @@ export default function TextInput(props: TextInputProps) {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-      <InputContainer $height={height} $state={textInputState}>
-        {isHighHeight && content && <Label htmlFor={name}>{name}</Label>}
-        {!isHighHeight && <Label htmlFor={name}>{name}</Label>}
+    <StyledTextInput>
+      <InputContainer $variant={variant} $state={textInputState}>
+        {isTallType && content && <Label htmlFor={name}>{name}</Label>}
+        {!isTallType && <Label htmlFor={name}>{name}</Label>}
         <Input
           id={name}
           type="text"
@@ -46,23 +46,34 @@ export default function TextInput(props: TextInputProps) {
       {helpText && (
         <HelpTextArea $state={textInputState}>{helpText}</HelpTextArea>
       )}
-    </div>
+    </StyledTextInput>
   );
 }
 
+const INPUT_HEIGHT = {
+  tall: 56,
+  short: 40,
+};
+
+const StyledTextInput = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
 const InputContainer = styled.div<{
-  $height: number;
+  $variant: "tall" | "short";
   $state: "enabled" | "active" | "disabled" | "error";
 }>`
   display: flex;
-  flex-direction: ${({ $height }) => ($height === 56 ? "column" : "row")};
+  flex-direction: ${({ $variant }) => ($variant === "tall" ? "column" : "row")};
   width: 100%;
-  justify-content: ${({ $height }) =>
-    $height === 56 ? "center" : "space-between"};
+  justify-content: ${({ $variant }) =>
+    $variant === "tall" ? "center" : "space-between"};
   padding: 0px 16px;
   gap: 8px;
   color: ${({ theme: { neutral } }) => neutral.text.weak};
-  height: ${({ $height }) => $height}px;
+  height: ${({ $variant }) => INPUT_HEIGHT[$variant]}px;
   border: ${({ $state, theme: { neutral, border, danger } }) => {
     const type = {
       active: `${border.default} ${neutral.border.defaultActive}`,
@@ -72,8 +83,8 @@ const InputContainer = styled.div<{
     };
     return type[$state];
   }};
-  border-radius: ${({ $height, theme: { radius } }) =>
-    $height === 56 ? `${radius.l}` : `${radius.m}`};
+  border-radius: ${({ $variant, theme: { radius } }) =>
+    $variant === "tall" ? `${radius.l}` : `${radius.m}`};
   background-color: ${({ $state, theme: { neutral } }) => {
     const type = {
       active: neutral.surface.strong,
@@ -83,8 +94,8 @@ const InputContainer = styled.div<{
     };
     return type[$state];
   }};
-  ${({ $state, theme: { opacity } }) =>
-    $state === "disabled" && `opacity: ${opacity.disabled};`}
+  opacity: ${({ $state, theme: { opacity } }) =>
+    $state === "disabled" && opacity.disabled};
 `;
 
 const Label = styled.label`
