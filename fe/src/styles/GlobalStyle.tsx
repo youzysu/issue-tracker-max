@@ -62,6 +62,11 @@ export default createGlobalStyle`
     margin: 0;
   }
 
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
   html {
     box-sizing: border-box;
   }
@@ -72,5 +77,14 @@ export default createGlobalStyle`
     &::after {
       box-sizing: inherit;
     }
+  }
+
+  #root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: ${({ theme: { neutral } }) => neutral.surface.default};
   }
 `;
