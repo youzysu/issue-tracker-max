@@ -18,6 +18,9 @@ export const StyledAuthPage = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background: ${({ theme: { neutral } }) => neutral.surface.default};
 
   .login-area {
     display: flex;

@@ -78,13 +78,4 @@ export default createGlobalStyle`
       box-sizing: inherit;
     }
   }
-
-  #root {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
-    background: ${({ theme: { neutral } }) => neutral.surface.default};
-  }
 `;
