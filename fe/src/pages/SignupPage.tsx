@@ -1,6 +1,9 @@
 import Button from "@components/common/Button";
 import TextInput from "@components/common/TextInput";
 import useInput from "@hooks/useInput";
+import { postSignup } from "api";
+import { AxiosError } from "axios";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthForm } from "./LoginPage";
 
@@ -15,10 +18,24 @@ export default function SignupPage() {
     maxLength: 16,
     minLength: 6,
   });
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      await postSignup(username.value, password.value);
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        const { message } = error.response.data;
+        setErrorMessage(message);
+      }
+    }
+  };
 
   return (
     <>
-      <AuthForm>
+      <AuthForm onSubmit={onSubmit}>
         <TextInput
           name="아이디"
           variant="tall"
@@ -36,16 +53,13 @@ export default function SignupPage() {
           type="password"
           {...password}
         />
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
         <Button
           variant="container"
           size="L"
           className="login-btn"
           disabled={!isValidUsername || !isValidPassword}
-          type="submit"
-          onClick={(e) => {
-            e.preventDefault();
-            console.log("회원가입");
-          }}>
+          type="submit">
           회원가입
         </Button>
       </AuthForm>

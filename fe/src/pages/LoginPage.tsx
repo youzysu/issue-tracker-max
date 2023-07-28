@@ -1,6 +1,9 @@
 import Button from "@components/common/Button";
 import TextInput from "@components/common/TextInput";
 import useInput from "@hooks/useInput";
+import { postLogin } from "api";
+import { AxiosError } from "axios";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -15,6 +18,21 @@ export default function LoginPage() {
     maxLength: 16,
     minLength: 6,
   });
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      await postLogin(username.value, password.value);
+      // accessToken을 받아서 axios의 header에 넣어주는 로직이 필요함
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        const { message } = error.response.data;
+        setErrorMessage(message);
+      }
+    }
+  };
 
   return (
     <>
@@ -22,7 +40,7 @@ export default function LoginPage() {
         GitHub 계정으로 로그인
       </Button>
       <span className="or">or</span>
-      <AuthForm>
+      <AuthForm onSubmit={onSubmit}>
         <TextInput
           name="아이디"
           variant="tall"
@@ -40,16 +58,13 @@ export default function LoginPage() {
           type="password"
           {...password}
         />
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
         <Button
           variant="container"
           size="L"
           className="login-btn"
           disabled={!isValidUsername || !isValidPassword}
-          type="submit"
-          onClick={(e) => {
-            e.preventDefault();
-            console.log("로그인");
-          }}>
+          type="submit">
           아이디로 로그인
         </Button>
       </AuthForm>

@@ -42,4 +42,9 @@ export const StyledAuthPage = styled.div`
     font: ${({ theme: { font } }) => font.displayMD16};
     color: ${({ theme: { neutral } }) => neutral.text.default};
   }
+
+  .error-message {
+    font: ${({ theme: { font } }) => font.displayMD16};
+    color: ${({ theme: { danger } }) => danger.text.default};
+  }
 `;
