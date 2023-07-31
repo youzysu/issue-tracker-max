@@ -5,7 +5,6 @@ import IssuesPage from "@pages/MainPage/IssuesPage";
 import MainPage from "@pages/MainPage/MainPage";
 import GlobalStyle from "@styles/GlobalStyle";
 import { darkMode, lightMode } from "@styles/designSystem";
-import { AuthProvider } from "context/authContext";
 import { useState } from "react";
 import {
   Route,
@@ -42,9 +41,7 @@ export default function App() {
   return (
     <ThemeProvider theme={themeMode === "light" ? lightMode : darkMode}>
       <GlobalStyle />
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
+      <RouterProvider router={router} />
     </ThemeProvider>
   );
 }
