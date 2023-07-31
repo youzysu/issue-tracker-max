@@ -82,17 +82,8 @@ const TableHeaderContents = styled.div`
       margin-right: 32px;
     }
 
-    button:first-of-type {
-      margin-right: 24px;
-    }
-
-    button {
-      color: ${({ theme: { neutral } }) => neutral.text.default};
-      font: ${({ theme: { font } }) => font.availableMD16};
-
-      img {
-        filter: ${({ theme: { filter } }) => filter.neutralTextDefault};
-      }
+    > *:last-child {
+      gap: 24px;
     }
   }
 

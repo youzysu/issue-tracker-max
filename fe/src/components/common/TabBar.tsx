@@ -82,16 +82,21 @@ const StyledTabButton = styled.div<{
   $selected: boolean;
   $hasOutline: boolean;
 }>`
-  width: 50%;
-  height: 100%;
+  ${({ theme: { neutral }, $selected, $hasOutline }) =>
+    $hasOutline &&
+    css`
+      width: 50%;
+      height: 100%;
 
-  & > button {
-    width: 100%;
-    height: 100%;
-  }
+      & > button {
+        width: 100%;
+        height: 100%;
+      }
 
-  background-color: ${({ theme: { neutral }, $selected, $hasOutline }) =>
-    $hasOutline && $selected ? neutral.surface.bold : neutral.surface.default};
+      background-color: ${$selected
+        ? neutral.surface.bold
+        : neutral.surface.default};
+    `}
 
   .tab-button-icon {
     filter: ${({ theme: { filter }, $selected }) =>
