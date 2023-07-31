@@ -1,66 +1,92 @@
-import labelIcon from "@assets/icon/label.svg";
-import milestoneIcon from "@assets/icon/milestone.svg";
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Button from "./Button";
 
-export default function TabBar({
-  labelCount,
-  milestoneCount,
-}: {
-  labelCount: number;
-  milestoneCount: number;
-}) {
-  const [selectedTab, setSelectedTab] = useState<"label" | "milestone" | null>(
-    null
-  );
-  const onLabelButtonClick = () => setSelectedTab("label");
-  const onMilestoneButtonClick = () => setSelectedTab("milestone");
-  const isLabelSelected = selectedTab === "label";
-  const isMilestoneSelected = selectedTab === "milestone";
+type TabBarInfo = {
+  iconSrc: string;
+  name: string;
+  count: number;
+};
+
+type Props = {
+  left: TabBarInfo;
+  right: TabBarInfo;
+  borderType: "default" | "none";
+};
+
+export default function TabBar({ left, right, borderType }: Props) {
+  const [selectedTab, setSelectedTab] = useState<string | null>(null);
+
+  const isRightSelected = selectedTab === right.name;
+  const isLeftSelected = selectedTab === left.name;
+  const isDefaultBorder = borderType === "default";
+
+  const onLeftClick = () => setSelectedTab(left.name);
+  const onRightClick = () => setSelectedTab(right.name);
 
   return (
-    <StyledTabBar>
-      <StyledTabButton $selected={isLabelSelected}>
-        <Button variant="ghost" size="M" onClick={onLabelButtonClick}>
-          <img src={labelIcon} alt="label-icon" />
-          <span>레이블({labelCount})</span>
+    <StyledTabBar $isDefaultBorder={isDefaultBorder}>
+      <StyledTabButton
+        $selected={isLeftSelected}
+        $isDefaultBorder={isDefaultBorder}>
+        <Button variant="ghost" size="M" onClick={onLeftClick}>
+          <img
+            className="tab-button-icon"
+            src={left.iconSrc}
+            alt={`${left.name}-icon`}
+          />
+          <span className="tab-button-text">
+            {left.name}({left.count})
+          </span>
         </Button>
       </StyledTabButton>
-      <StyledTabButton $selected={isMilestoneSelected}>
-        <Button variant="ghost" size="M" onClick={onMilestoneButtonClick}>
-          <img src={milestoneIcon} alt="milestone-icon" />
-          <span>마일스톤({milestoneCount})</span>
+      <StyledTabButton
+        $selected={isRightSelected}
+        $isDefaultBorder={isDefaultBorder}>
+        <Button variant="ghost" size="M" onClick={onRightClick}>
+          <img
+            className="tab-button-icon"
+            src={right.iconSrc}
+            alt={`${right.name}-icon`}
+          />
+          <span className="tab-button-text">
+            {right.name}({right.count})
+          </span>
         </Button>
       </StyledTabButton>
     </StyledTabBar>
   );
 }
 
-const StyledTabBar = styled.div`
+const StyledTabBar = styled.div<{ $isDefaultBorder: boolean }>`
   display: flex;
-  justify-content: center;
-  align-items: center;
 
-  width: 320px;
-  height: 40px;
+  ${({ $isDefaultBorder }) =>
+    $isDefaultBorder &&
+    css`
+      width: 320px;
+      height: 40px;
+      border: ${({ theme: { border, neutral } }) =>
+        `${border.default} ${neutral.border.default}`};
+      border-radius: ${({ theme: { radius } }) => radius.m};
 
-  border: ${({ theme: { border, neutral } }) =>
-    `${border.default} ${neutral.border.default}`};
-  border-radius: ${({ theme: { radius } }) => radius.m};
+      & > div:first-child {
+        border-radius: 11px 0 0 11px;
+      }
 
-  & > div:first-child {
-    border-radius: 11px 0 0 11px;
-  }
-  & > div:last-child {
-    border-radius: 0 11px 11px 0;
-    border-left: ${({ theme: { border, neutral } }) =>
-      `${border.default} ${neutral.border.default}`};
-  }
+      & > div:last-child {
+        border-radius: 0 11px 11px 0;
+        border-left: ${({ theme: { border, neutral } }) =>
+          `${border.default} ${neutral.border.default}`};
+      }
+    `}
 `;
 
-const StyledTabButton = styled.div<{ $selected: boolean }>`
-  width: 100%;
+const StyledTabButton = styled.div<{
+  $selected: boolean;
+  $isDefaultBorder: boolean;
+}>`
+  width: 50%;
   height: 100%;
 
   & > button {
@@ -68,18 +94,20 @@ const StyledTabButton = styled.div<{ $selected: boolean }>`
     height: 100%;
   }
 
-  background-color: ${({ theme: { neutral }, $selected }) =>
-    $selected ? neutral.surface.bold : neutral.surface.default};
+  background-color: ${({ theme: { neutral }, $selected, $isDefaultBorder }) =>
+    $isDefaultBorder && $selected
+      ? neutral.surface.bold
+      : neutral.surface.default};
 
-  & span {
+  .tab-button-icon {
+    filter: ${({ theme: { filter }, $selected }) =>
+      $selected ? filter.neutralTextStrong : filter.neutralTextDefault};
+  }
+
+  .tab-button-text {
     font: ${({ theme: { font }, $selected }) =>
       $selected ? font.selectedBold16 : font.availableMD16};
     color: ${({ theme: { neutral }, $selected }) =>
       $selected ? neutral.text.strong : neutral.text.default};
-  }
-
-  & img {
-    filter: ${({ theme: { filter }, $selected }) =>
-      $selected ? filter.neutralTextStrong : filter.neutralTextDefault};
   }
 `;
