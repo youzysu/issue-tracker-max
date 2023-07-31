@@ -24,7 +24,7 @@ export default function IssuesPage() {
           <TabBar
             left={tabBarLeftInfo}
             right={tabBarRightInfo}
-            borderType="default"
+            borderStyle="outline"
           />
           <Button size="S" variant="container">
             <img src={plusIcon} alt="이슈 작성" />

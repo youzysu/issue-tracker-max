@@ -22,7 +22,7 @@ export default function TableHeaderIssues() {
           <TabBar
             left={tabBarLeftInfo}
             right={tabBarRightInfo}
-            borderType="none"
+            borderStyle="none"
           />
         </div>
 

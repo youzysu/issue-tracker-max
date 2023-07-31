@@ -11,24 +11,22 @@ type TabBarInfo = {
 type Props = {
   left: TabBarInfo;
   right: TabBarInfo;
-  borderType: "default" | "none";
+  borderStyle: "outline" | "none";
 };
 
-export default function TabBar({ left, right, borderType }: Props) {
+export default function TabBar({ left, right, borderStyle }: Props) {
   const [selectedTab, setSelectedTab] = useState<string | null>(null);
 
   const isRightSelected = selectedTab === right.name;
   const isLeftSelected = selectedTab === left.name;
-  const isDefaultBorder = borderType === "default";
+  const hasOutline = borderStyle === "outline";
 
   const onLeftClick = () => setSelectedTab(left.name);
   const onRightClick = () => setSelectedTab(right.name);
 
   return (
-    <StyledTabBar $isDefaultBorder={isDefaultBorder}>
-      <StyledTabButton
-        $selected={isLeftSelected}
-        $isDefaultBorder={isDefaultBorder}>
+    <StyledTabBar $hasOutline={hasOutline}>
+      <StyledTabButton $selected={isLeftSelected} $hasOutline={hasOutline}>
         <Button variant="ghost" size="M" onClick={onLeftClick}>
           <img
             className="tab-button-icon"
@@ -40,9 +38,7 @@ export default function TabBar({ left, right, borderType }: Props) {
           </span>
         </Button>
       </StyledTabButton>
-      <StyledTabButton
-        $selected={isRightSelected}
-        $isDefaultBorder={isDefaultBorder}>
+      <StyledTabButton $selected={isRightSelected} $hasOutline={hasOutline}>
         <Button variant="ghost" size="M" onClick={onRightClick}>
           <img
             className="tab-button-icon"
@@ -58,11 +54,11 @@ export default function TabBar({ left, right, borderType }: Props) {
   );
 }
 
-const StyledTabBar = styled.div<{ $isDefaultBorder: boolean }>`
+const StyledTabBar = styled.div<{ $hasOutline: boolean }>`
   display: flex;
 
-  ${({ $isDefaultBorder }) =>
-    $isDefaultBorder &&
+  ${({ $hasOutline }) =>
+    $hasOutline &&
     css`
       width: 320px;
       height: 40px;
@@ -84,7 +80,7 @@ const StyledTabBar = styled.div<{ $isDefaultBorder: boolean }>`
 
 const StyledTabButton = styled.div<{
   $selected: boolean;
-  $isDefaultBorder: boolean;
+  $hasOutline: boolean;
 }>`
   width: 50%;
   height: 100%;
@@ -94,10 +90,8 @@ const StyledTabButton = styled.div<{
     height: 100%;
   }
 
-  background-color: ${({ theme: { neutral }, $selected, $isDefaultBorder }) =>
-    $isDefaultBorder && $selected
-      ? neutral.surface.bold
-      : neutral.surface.default};
+  background-color: ${({ theme: { neutral }, $selected, $hasOutline }) =>
+    $hasOutline && $selected ? neutral.surface.bold : neutral.surface.default};
 
   .tab-button-icon {
     filter: ${({ theme: { filter }, $selected }) =>
