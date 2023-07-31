@@ -1,7 +1,7 @@
 import { fetcher } from "./fetcher";
 
 export const postSignup = async (loginId: string, password: string) => {
-  await fetcher.post("/auth/signup", { loginId, password });
+  return await fetcher.post("/auth/signup", { loginId, password });
 };
 
 export const postLogin = async (loginId: string, password: string) => {
