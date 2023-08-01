@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { Label } from "./Label";
 
 interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -25,8 +26,10 @@ export default function TextInput({
   return (
     <StyledTextInput>
       <InputContainer $variant={variant} $state={textInputState}>
-        {isTallType && value && <Label htmlFor={name}>{name}</Label>}
-        {!isTallType && <Label htmlFor={name}>{name}</Label>}
+        {isTallType && value && (
+          <Label htmlFor={name}>{props.placeholder}</Label>
+        )}
+        {!isTallType && <Label htmlFor={name}>{props.placeholder}</Label>}
         <Input
           id={name}
           $typingState={typingState}
@@ -88,12 +91,6 @@ const InputContainer = styled.div<{
   }};
   opacity: ${({ $state, theme: { opacity } }) =>
     $state === "disabled" && opacity.disabled};
-`;
-
-const Label = styled.label`
-  display: flex;
-  align-items: center;
-  font: ${({ theme: { font } }) => font.displayMD12};
 `;
 
 const Input = styled.input<{

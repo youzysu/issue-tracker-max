@@ -1,3 +1,4 @@
+import { Avatar } from "@components/common/Avatar";
 import InputRadio from "@components/common/Input/InputRadio";
 import { styled } from "styled-components";
 import { DropdownItemType } from "./types";
@@ -8,7 +9,11 @@ export default function DropdownItem({ item }: { item: DropdownItemType }) {
       case "withImg":
         return (
           <Label htmlFor={item.content}>
-            <Avatar src={item.imgSrc} alt={`${item.name}: ${item.content}`} />
+            <Avatar
+              src={item.imgSrc}
+              alt={`${item.name}: ${item.content}`}
+              $size="S"
+            />
             <Content>{item.content}</Content>
             <InputRadio name={item.name} id={item.content} />
           </Label>
@@ -70,13 +75,6 @@ const Content = styled.div`
   &:has(+ .input-radio input[type="radio"]:checked) {
     font: ${({ theme: { font } }) => font.selectedBold16};
   }
-`;
-
-const Avatar = styled.img`
-  widht: 20px;
-  height: 20px;
-  border-radius: ${({ theme: { radius } }) => radius.half};
-  overflow: hidden;
 `;
 
 const ColorSwatch = styled.span<{ $colorFill: string }>`
