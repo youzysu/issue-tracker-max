@@ -9,13 +9,15 @@ type TabBarInfo = {
   callback?: () => void;
 };
 
-type Props = {
+export default function TabBar({
+  left,
+  right,
+  borderStyle,
+}: {
   left: TabBarInfo;
   right: TabBarInfo;
   borderStyle: "outline" | "none";
-};
-
-export default function TabBar({ left, right, borderStyle }: Props) {
+}) {
   const [selectedTab, setSelectedTab] = useState<string | null>(null);
 
   const isRightSelected = selectedTab === right.name;
@@ -34,7 +36,7 @@ export default function TabBar({ left, right, borderStyle }: Props) {
 
   return (
     <StyledTabBar $hasOutline={hasOutline}>
-      <StyledTabButton $selected={isLeftSelected} $hasOutline={hasOutline}>
+      <TabButtonWrapper $selected={isLeftSelected} $hasOutline={hasOutline}>
         <Button variant="ghost" size="M" onClick={onLeftClick}>
           <img
             className="tab-button-icon"
@@ -45,8 +47,8 @@ export default function TabBar({ left, right, borderStyle }: Props) {
             {left.name}({left.count})
           </span>
         </Button>
-      </StyledTabButton>
-      <StyledTabButton $selected={isRightSelected} $hasOutline={hasOutline}>
+      </TabButtonWrapper>
+      <TabButtonWrapper $selected={isRightSelected} $hasOutline={hasOutline}>
         <Button variant="ghost" size="M" onClick={onRightClick}>
           <img
             className="tab-button-icon"
@@ -57,7 +59,7 @@ export default function TabBar({ left, right, borderStyle }: Props) {
             {right.name}({right.count})
           </span>
         </Button>
-      </StyledTabButton>
+      </TabButtonWrapper>
     </StyledTabBar>
   );
 }
@@ -86,7 +88,7 @@ const StyledTabBar = styled.div<{ $hasOutline: boolean }>`
     `}
 `;
 
-const StyledTabButton = styled.div<{
+const TabButtonWrapper = styled.div<{
   $selected: boolean;
   $hasOutline: boolean;
 }>`
