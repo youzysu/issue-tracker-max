@@ -5,14 +5,22 @@ import FilterBar from "@components/FilterBar";
 import { Table, TableBodyIssues, TableHeaderIssues } from "@components/Table";
 import Button from "@components/common/Button";
 import TabBar from "@components/common/TabBar";
+import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 
 export default function IssuesPage() {
-  const tabBarLeftInfo = { name: "레이블", count: 3, iconSrc: labelIcon };
+  const navigate = useNavigate();
+  const tabBarLeftInfo = {
+    name: "레이블",
+    count: 3,
+    iconSrc: labelIcon,
+    callback: () => navigate("/labels"),
+  };
   const tabBarRightInfo = {
     name: "마일스톤",
     count: 2,
     iconSrc: milestoneIcon,
+    callback: () => navigate("/milestones"),
   };
 
   return (

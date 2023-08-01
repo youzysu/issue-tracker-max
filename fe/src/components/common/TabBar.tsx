@@ -6,6 +6,7 @@ type TabBarInfo = {
   iconSrc: string;
   name: string;
   count: number;
+  callback?: () => void;
 };
 
 type Props = {
@@ -21,8 +22,15 @@ export default function TabBar({ left, right, borderStyle }: Props) {
   const isLeftSelected = selectedTab === left.name;
   const hasOutline = borderStyle === "outline";
 
-  const onLeftClick = () => setSelectedTab(left.name);
-  const onRightClick = () => setSelectedTab(right.name);
+  const onLeftClick = () => {
+    setSelectedTab(left.name);
+    left.callback && left.callback();
+  };
+
+  const onRightClick = () => {
+    setSelectedTab(right.name);
+    right.callback && right.callback();
+  };
 
   return (
     <StyledTabBar $hasOutline={hasOutline}>
