@@ -81,6 +81,23 @@ export const handlers = [
   rest.get("/api/users", async (_req, res, ctx) => {
     return res(ctx.status(200), ctx.json(users));
   }),
+
+  rest.post("/api/issues", async (req, res, ctx) => {
+    const newIssue = await req.json();
+    issueList.push({
+      issueNumber: issueList.length + 1,
+      isOpen: true,
+      title: newIssue.title,
+      labels: labelList.filter((l) => newIssue.labels.includes(l.labelId)),
+      authorName: "currentUser",
+      assignees: users.filter((u) =>
+        newIssue.assignees.includes(u.userAccountId)
+      ),
+      milestone: "",
+      createdAt: new Date().toISOString(),
+    });
+    return res(ctx.status(200), ctx.json({ issueId: issueList.length + 1 }));
+  }),
 ];
 
 // TODO: 만료된 토큰에 대한 응답 처리

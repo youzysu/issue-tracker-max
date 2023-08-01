@@ -6,12 +6,12 @@ export const users = [
   {
     userAccountId: 1,
     username: "bruni",
-    profileUrl: "http://s3.image.123",
+    profileUrl: "https://avatars.githubusercontent.com/u/79886384?v=4",
   },
   {
     userAccountId: 2,
     username: "bean",
-    profileUrl: "http://s3.image.1233",
+    profileUrl: "https://avatars.githubusercontent.com/u/79886384?v=4",
   },
 ];
 
@@ -132,18 +132,39 @@ export const issueList = [
 
 export const labelList = [
   {
+    labelId: 1,
     name: "bug",
     fontColor: "#FFF",
     backgroundColor: "#D73A4A",
   },
   {
+    labelId: 2,
     name: "docs",
     fontColor: "#FFF",
     backgroundColor: "#2675CA",
   },
   {
+    labelId: 3,
     name: "feat",
     fontColor: "#000",
     backgroundColor: "#FACA02",
+  },
+  {
+    labelId: 4,
+    name: "style",
+    fontColor: "#FFF",
+    backgroundColor: "#0025E6",
+  },
+  {
+    labelId: 5,
+    name: "asdf",
+    fontColor: "#FFF",
+    backgroundColor: "#0025E6",
+  },
+  {
+    labelId: 6,
+    name: "qerqer",
+    fontColor: "#000",
+    backgroundColor: "#FF3B30",
   },
 ];

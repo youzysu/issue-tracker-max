@@ -24,3 +24,15 @@ export const getMilestones = async () => {
 export const getUsers = async () => {
   return await fetcherWithBearer.get<User[]>("/users");
 };
+
+export const postIssue = async (body: PostIssueBody) => {
+  return await fetcherWithBearer.post<{ issueId: number }>("/issues", body);
+};
+
+type PostIssueBody = {
+  title: string;
+  content?: string;
+  assignees?: number[];
+  labels?: number[];
+  milestone?: number;
+};
