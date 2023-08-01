@@ -26,3 +26,9 @@ export type IssueItem = {
   assignees: Assignee[];
   createdAt: string;
 };
+
+export type User = {
+  userAccountId: number;
+  username: string;
+  profileUrl: string;
+};

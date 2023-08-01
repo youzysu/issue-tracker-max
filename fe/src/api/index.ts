@@ -1,4 +1,4 @@
-import { IssueItem, Label, Milestone } from "@customTypes/index";
+import { IssueItem, Label, Milestone, User } from "@customTypes/index";
 import { fetcher, fetcherWithBearer } from "./fetcher";
 
 export const postSignup = async (loginId: string, password: string) => {
@@ -19,4 +19,8 @@ export const getLabels = async () => {
 
 export const getMilestones = async () => {
   return await fetcherWithBearer.get<Milestone[]>("/milestones");
+};
+
+export const getUsers = async () => {
+  return await fetcherWithBearer.get<User[]>("/users");
 };
