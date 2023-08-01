@@ -42,7 +42,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <Button variant="outline" size="L" className="github-login-btn">
+      <Button variant="outline" size="XL" className="github-login-btn">
         GitHub 계정으로 로그인
       </Button>
       <span className="or">or</span>
@@ -67,7 +67,7 @@ export default function LoginPage() {
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         <Button
           variant="container"
-          size="L"
+          size="XL"
           className="login-btn"
           disabled={!isValidLoginId || !isValidPassword}
           type="submit">
@@ -75,7 +75,7 @@ export default function LoginPage() {
         </Button>
       </AuthForm>
       <Link to="/auth/signup">
-        <Button variant="ghost" size="L" className="change-auth-btn">
+        <Button variant="ghost" size="XL" className="change-auth-btn">
           아직 계정이 없으신가요? 회원가입
         </Button>
       </Link>
