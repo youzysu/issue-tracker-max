@@ -5,20 +5,30 @@ import FilterBar from "@components/FilterBar";
 import { Table, TableBodyIssues, TableHeaderIssues } from "@components/Table";
 import Button from "@components/common/Button";
 import TabBar from "@components/common/TabBar";
+import { IssueItem, Label, Milestone } from "@customTypes/index";
+import useFetch from "@hooks/useFetch";
+import { getIssues, getLabels, getMilestones } from "api";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 
 export default function IssuesPage() {
+  const issuesList = useFetch<IssueItem[]>([], getIssues);
+  const labelsList = useFetch<Label[]>([], getLabels);
+  const milestonesList = useFetch<Milestone[]>([], getMilestones);
+
+  const numOpen = issuesList.filter((issue) => issue.isOpen).length;
+  const numClosed = issuesList.length - numOpen;
+
   const navigate = useNavigate();
   const tabBarLeftInfo = {
     name: "레이블",
-    count: 3,
+    count: labelsList.length,
     iconSrc: labelIcon,
     callback: () => navigate("/labels"),
   };
   const tabBarRightInfo = {
     name: "마일스톤",
-    count: 2,
+    count: milestonesList.length,
     iconSrc: milestoneIcon,
     callback: () => navigate("/milestones"),
   };
@@ -42,8 +52,8 @@ export default function IssuesPage() {
       </IssuesNavBar>
 
       <Table>
-        <TableHeaderIssues />
-        <TableBodyIssues issuesList={[{ title: "이슈 제목" }]} />
+        <TableHeaderIssues {...{ numOpen, numClosed }} />
+        <TableBodyIssues issuesList={issuesList} />
       </Table>
     </div>
   );

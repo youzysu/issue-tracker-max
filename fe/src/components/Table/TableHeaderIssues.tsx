@@ -6,12 +6,24 @@ import TabBar from "@components/common/TabBar";
 import { styled } from "styled-components";
 import TableHeader from "./TableHeader";
 
-export default function TableHeaderIssues() {
-  const tabBarLeftInfo = { name: "열린 이슈", count: 2, iconSrc: alertIcon };
+export default function TableHeaderIssues({
+  numOpen,
+  numClosed,
+}: {
+  numOpen: number;
+  numClosed: number;
+}) {
+  const tabBarLeftInfo = {
+    name: "열린 이슈",
+    count: numOpen,
+    iconSrc: alertIcon,
+    callback: () => console.log("열린 이슈"),
+  };
   const tabBarRightInfo = {
     name: "닫힌 이슈",
-    count: 0,
+    count: numClosed,
     iconSrc: archiveIcon,
+    callback: () => console.log("닫힌 이슈"),
   };
 
   return (
@@ -26,6 +38,7 @@ export default function TableHeaderIssues() {
           />
         </div>
 
+        {/* TODO: dropdownList */}
         <div className="right-wrapper">
           <DropdownIndicator
             displayName="담당자"
