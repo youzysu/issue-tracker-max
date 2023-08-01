@@ -21,10 +21,17 @@ export type DropdownPanelType = {
 
 export type DropdownItemType =
   | {
+      id: number;
       variant: "withImg";
       name: string;
       content: string;
       imgSrc: string;
     }
-  | { variant: "withColor"; name: string; content: string; colorFill: string }
-  | { variant: "plain"; name: string; content: string };
+  | {
+      id: number;
+      variant: "withColor";
+      name: string;
+      content: string;
+      colorFill: string;
+    }
+  | { id: number; variant: "plain"; name: string; content: string };

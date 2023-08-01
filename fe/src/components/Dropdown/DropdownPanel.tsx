@@ -34,6 +34,7 @@ export default function DropdownPanel({
               {canBeNegatory && (
                 <DropdownItem
                   item={{
+                    id: 0,
                     variant: "plain",
                     name: dropdownName,
                     content: `${DropdownNameKOR[dropdownName]}${suffixKOR} 없는 이슈`,
@@ -97,6 +98,7 @@ const StyledDropdownPanel = styled.div<{ $position: "left" | "right" }>`
   border-radius: ${({ theme: { radius } }) => radius.l};
   box-shadow: ${({ theme: { boxShadow } }) => boxShadow};
   overflow: hidden;
+  z-index: 1;
 `;
 
 const Header = styled.header`

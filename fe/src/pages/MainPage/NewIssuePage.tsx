@@ -1,10 +1,9 @@
 import XIcon from "@assets/icon/xSquare.svg";
 import { Avatar } from "@components/common/Avatar";
 import Button from "@components/common/Button";
-import Sidebar from "@components/common/Sidebar";
+import Sidebar from "@components/common/Sidebar/Sidebar";
 import TextArea from "@components/common/TextArea";
 import TextInput from "@components/common/TextInput";
-import { Label, User } from "@customTypes/index";
 import { postIssue } from "api";
 import { useAuth } from "context/authContext";
 import { useState } from "react";
@@ -14,13 +13,25 @@ import styled from "styled-components";
 export default function NewIssuePage() {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
-  const [assigneeList, setAssigneeList] = useState<User[]>([]);
-  const [labelList, setLabelList] = useState<Label[]>([]);
+  const [assignees, setAssignees] = useState<number[]>([]);
+  const [labels, setLabels] = useState<number[]>([]);
 
   const { userInfo } = useAuth();
+
   const navigate = useNavigate();
+  const moveMainPage = () => navigate("/issues");
+  const moveIssueDetailPage = (issueId: number) =>
+    navigate(`/issues/${issueId}`);
 
   const isFilled = !!title;
+
+  const onAssigneeChange = (assignees: number[]) => {
+    setAssignees(assignees);
+  };
+
+  const onLabelChange = (labels: number[]) => {
+    setLabels(labels);
+  };
 
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const targetValue = e.target.value;
@@ -32,13 +43,18 @@ export default function NewIssuePage() {
     setContent(targetValue);
   };
 
-  const moveToMainPage = () => navigate("/");
-
   const onIssueSubmit = async () => {
-    const res = await postIssue({
+    const {
+      data: { issueId },
+    } = await postIssue({
       title,
       content,
+      assignees,
+      labels,
     });
+    if (issueId) {
+      moveIssueDetailPage(issueId);
+    }
   };
 
   return (
@@ -70,13 +86,15 @@ export default function NewIssuePage() {
           />
         </div>
         <div>
-          <Sidebar {...{ assigneeList, labelList }} />
+          <Sidebar
+            {...{ assignees, labels, onAssigneeChange, onLabelChange }}
+          />
         </div>
       </div>
 
       <Line />
       <footer className="footer">
-        <Button variant="ghost" size="M" onClick={moveToMainPage}>
+        <Button variant="ghost" size="M" onClick={moveMainPage}>
           <img src={XIcon} alt="" />
           <span>작성 취소</span>
         </Button>

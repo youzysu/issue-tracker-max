@@ -1,4 +1,5 @@
 export type Label = {
+  labelId: number;
   name: string;
   fontColor: string;
   backgroundColor: string;
@@ -20,11 +21,11 @@ export type IssueItem = {
   issueNumber: number;
   isOpen: boolean;
   title: string;
-  labels: Label[];
-  milestone: string;
   authorName: string;
-  assignees: Assignee[];
   createdAt: string;
+  labels?: Label[];
+  milestone?: string;
+  assignees?: Assignee[];
 };
 
 export type User = {

@@ -1,9 +1,33 @@
 import { Avatar } from "@components/common/Avatar";
+import CircleCheckbox from "@components/common/Input/CircleCheckbox";
 import InputRadio from "@components/common/Input/InputRadio";
+import { CheckContext } from "context/checkContext";
+import { useContext } from "react";
 import { styled } from "styled-components";
 import { DropdownItemType } from "./types";
 
 export default function DropdownItem({ item }: { item: DropdownItemType }) {
+  const checkContext = useContext(CheckContext);
+
+  const getInput = () => {
+    if (checkContext) {
+      const circleCheckboxProps: React.InputHTMLAttributes<HTMLInputElement> = {
+        onChange: ({ target: { checked } }) =>
+          checkContext.toggleCheck({ checked, value: item.id }),
+        checked: checkContext.isChecked(item.id),
+      };
+
+      return (
+        <CircleCheckbox
+          name={item.name}
+          id={item.content}
+          {...circleCheckboxProps}
+        />
+      );
+    }
+    return <InputRadio name={item.name} id={item.content} />;
+  };
+
   const generateItem = (item: DropdownItemType) => {
     switch (item.variant) {
       case "withImg":
@@ -15,7 +39,7 @@ export default function DropdownItem({ item }: { item: DropdownItemType }) {
               $size="S"
             />
             <Content>{item.content}</Content>
-            <InputRadio name={item.name} id={item.content} />
+            {getInput()}
           </Label>
         );
       case "withColor":
@@ -23,14 +47,14 @@ export default function DropdownItem({ item }: { item: DropdownItemType }) {
           <Label htmlFor={item.content}>
             <ColorSwatch $colorFill={item.colorFill} />
             <Content>{item.content}</Content>
-            <InputRadio name={item.name} id={item.content} />
+            {getInput()}
           </Label>
         );
       case "plain":
         return (
           <Label htmlFor={item.content}>
             <Content>{item.content}</Content>
-            <InputRadio name={item.name} id={item.content} />
+            {getInput()}
           </Label>
         );
       default:
