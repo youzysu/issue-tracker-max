@@ -1,31 +1,47 @@
 import { Avatar } from "@components/common/Avatar";
 import CircleCheckbox from "@components/common/Input/CircleCheckbox";
 import InputRadio from "@components/common/Input/InputRadio";
-import { CheckContext } from "context/checkContext";
+import { CheckboxContext } from "context/checkboxContext";
+import { RadioContext } from "context/radioContext";
 import { useContext } from "react";
 import { styled } from "styled-components";
-import { DropdownItemType } from "./types";
+import { DropdownItemType, DropdownOption } from "./types";
 
-export default function DropdownItem({ item }: { item: DropdownItemType }) {
-  const checkContext = useContext(CheckContext);
+export default function DropdownItem({
+  option,
+  item,
+}: {
+  option: DropdownOption;
+  item: DropdownItemType;
+}) {
+  const checkContext = useContext(CheckboxContext);
+  const radioContext = useContext(RadioContext);
 
-  const getInput = () => {
-    if (checkContext) {
-      const circleCheckboxProps: React.InputHTMLAttributes<HTMLInputElement> = {
-        onChange: ({ target: { checked } }) =>
-          checkContext.toggleCheck({ checked, value: item.id }),
-        checked: checkContext.isChecked(item.id),
-      };
-
-      return (
+  const renderInput = () => {
+    const inputMap = {
+      multiple: checkContext && (
         <CircleCheckbox
           name={item.name}
           id={item.content}
-          {...circleCheckboxProps}
+          onChange={({ target: { checked } }) =>
+            checkContext.toggleCheck({ checked, value: item.id })
+          }
+          checked={checkContext.isChecked(item.id)}
         />
-      );
-    }
-    return <InputRadio name={item.name} id={item.content} />;
+      ),
+      single: radioContext && (
+        <InputRadio
+          name={item.name}
+          id={item.content}
+          value={item.id}
+          checked={radioContext.value === item.id}
+          onChange={() => radioContext.onChange(item.id)}
+        />
+      ),
+      default: <InputRadio name={item.name} id={item.content} />,
+    };
+
+    return inputMap[option] || inputMap.default;
   };
 
   const generateItem = (item: DropdownItemType) => {
@@ -39,7 +55,7 @@ export default function DropdownItem({ item }: { item: DropdownItemType }) {
               $size="S"
             />
             <Content>{item.content}</Content>
-            {getInput()}
+            {renderInput()}
           </Label>
         );
       case "withColor":
@@ -47,14 +63,14 @@ export default function DropdownItem({ item }: { item: DropdownItemType }) {
           <Label htmlFor={item.content}>
             <ColorSwatch $colorFill={item.colorFill} />
             <Content>{item.content}</Content>
-            {getInput()}
+            {renderInput()}
           </Label>
         );
       case "plain":
         return (
           <Label htmlFor={item.content}>
             <Content>{item.content}</Content>
-            {getInput()}
+            {renderInput()}
           </Label>
         );
       default:

@@ -5,7 +5,8 @@ import { Label } from "@customTypes/index";
 import useFetch from "@hooks/useFetch";
 import { getLabels } from "api";
 import styled from "styled-components";
-import CheckGroup from "./CheckGroup";
+import CheckboxGroup from "./CheckboxGroup";
+import { Container } from "./common";
 
 type LabelMap = {
   [key: number]: Label;
@@ -39,16 +40,19 @@ export default function AddLabel({
   };
 
   return (
-    <CheckGroup values={labels} onChange={onLabelChange}>
-      <DropdownIndicator
-        displayName="레이블"
-        dropdownPanelVariant="select"
-        dropdownName="label"
-        dropdownList={labelDropdownList}
-        dropdownPanelPosition="right"
-      />
+    <Container>
+      <CheckboxGroup values={labels} onChange={onLabelChange}>
+        <DropdownIndicator
+          displayName="레이블"
+          dropdownPanelVariant="select"
+          dropdownName="label"
+          dropdownList={labelDropdownList}
+          dropdownPanelPosition="right"
+          dropdownOption="multiple"
+        />
+      </CheckboxGroup>
       {!!labels.length && <Wrapper>{generateLabels()}</Wrapper>}
-    </CheckGroup>
+    </Container>
   );
 }
 

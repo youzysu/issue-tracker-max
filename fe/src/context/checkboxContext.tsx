@@ -9,7 +9,7 @@ export type toggleFn = ({
   value: number;
 }) => void;
 
-export const CheckContext = createContext<{
+export const CheckboxContext = createContext<{
   isChecked: checkFn;
   toggleCheck: toggleFn;
 } | null>(null);

@@ -1,7 +1,7 @@
-import { CheckContext, checkFn, toggleFn } from "context/checkContext";
-import styled from "styled-components";
+import { CheckboxContext, checkFn, toggleFn } from "context/checkboxContext";
+import { Fieldset } from "./common";
 
-export default function CheckGroup({
+export default function CheckboxGroup({
   children,
   values,
   onChange,
@@ -20,17 +20,10 @@ export default function CheckGroup({
   };
 
   return (
-    <StyledCheckGroup>
-      <CheckContext.Provider value={{ isChecked, toggleCheck }}>
+    <Fieldset>
+      <CheckboxContext.Provider value={{ isChecked, toggleCheck }}>
         {children}
-      </CheckContext.Provider>
-    </StyledCheckGroup>
+      </CheckboxContext.Provider>
+    </Fieldset>
   );
 }
-const StyledCheckGroup = styled.div`
-  width: 100%;
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;

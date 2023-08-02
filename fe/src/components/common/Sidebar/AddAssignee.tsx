@@ -5,7 +5,8 @@ import useFetch from "@hooks/useFetch";
 import { getUsers } from "api";
 import styled from "styled-components";
 import { Avatar } from "../Avatar";
-import CheckGroup from "./CheckGroup";
+import CheckboxGroup from "./CheckboxGroup";
+import { Container } from "./common";
 
 type UserMap = {
   [key: number]: User;
@@ -50,16 +51,19 @@ export default function AddAssignee({
   };
 
   return (
-    <CheckGroup values={assignees} onChange={onAssigneeChange}>
-      <DropdownIndicator
-        displayName="담당자"
-        dropdownPanelVariant="select"
-        dropdownName="assignee"
-        dropdownList={assigneeDropdownList}
-        dropdownPanelPosition="right"
-      />
+    <Container>
+      <CheckboxGroup values={assignees} onChange={onAssigneeChange}>
+        <DropdownIndicator
+          displayName="담당자"
+          dropdownPanelVariant="select"
+          dropdownName="assignee"
+          dropdownList={assigneeDropdownList}
+          dropdownPanelPosition="right"
+          dropdownOption="multiple"
+        />
+      </CheckboxGroup>
       {generateAssignees()}
-    </CheckGroup>
+    </Container>
   );
 }
 

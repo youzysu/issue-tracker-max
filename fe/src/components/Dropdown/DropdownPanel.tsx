@@ -6,6 +6,7 @@ import { DropdownNameKOR, DropdownPanelType } from "./types";
 export default function DropdownPanel({
   variant,
   dropdownName,
+  dropdownOption,
   dropdownList,
   onOutsideClick,
   position,
@@ -33,6 +34,7 @@ export default function DropdownPanel({
             <DropdownList>
               {canBeNegatory && (
                 <DropdownItem
+                  option={dropdownOption}
                   item={{
                     id: 0,
                     variant: "plain",
@@ -42,7 +44,11 @@ export default function DropdownPanel({
                 />
               )}
               {dropdownList.map((item) => {
-                return <DropdownItem {...{ key: item.content, item }} />;
+                return (
+                  <DropdownItem
+                    {...{ key: item.content, option: dropdownOption, item }}
+                  />
+                );
               })}
             </DropdownList>
           </>
@@ -55,7 +61,11 @@ export default function DropdownPanel({
             </Header>
             <DropdownList>
               {dropdownList.map((item) => {
-                return <DropdownItem {...{ key: item.content, item }} />;
+                return (
+                  <DropdownItem
+                    {...{ key: item.content, option: dropdownOption, item }}
+                  />
+                );
               })}
             </DropdownList>
           </>
@@ -68,7 +78,11 @@ export default function DropdownPanel({
             </Header>
             <DropdownList>
               {dropdownList.map((item) => {
-                return <DropdownItem {...{ key: item.content, item }} />;
+                return (
+                  <DropdownItem
+                    {...{ key: item.content, option: dropdownOption, item }}
+                  />
+                );
               })}
             </DropdownList>
           </>
