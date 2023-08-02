@@ -4,6 +4,7 @@ import Button from "@components/common/Button";
 import Sidebar from "@components/common/Sidebar/Sidebar";
 import TextArea from "@components/common/TextArea";
 import TextInput from "@components/common/TextInput";
+import { NewIssueInfo } from "@customTypes/index";
 import { postIssue } from "api";
 import { useAuth } from "context/authContext";
 import { useState } from "react";
@@ -11,11 +12,19 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export default function NewIssuePage() {
-  const [title, setTitle] = useState<string>("");
-  const [content, setContent] = useState<string>("");
-  const [assignees, setAssignees] = useState<number[]>([]);
-  const [labels, setLabels] = useState<number[]>([]);
-  const [milestoneId, setMilestoneId] = useState<number>(0);
+  // const [title, setTitle] = useState<string>("");
+  // const [content, setContent] = useState<string>("");
+  // const [assignees, setAssignees] = useState<number[]>([]);
+  // const [labels, setLabels] = useState<number[]>([]);
+  // const [milestoneId, setMilestoneId] = useState<number>(0);
+
+  const [newIssueInfo, setNewIssueInfo] = useState<NewIssueInfo>({
+    title: "",
+    content: "",
+    assignees: [],
+    labels: [],
+    milestone: 0,
+  });
 
   const { userInfo } = useAuth();
 
@@ -24,44 +33,41 @@ export default function NewIssuePage() {
   const moveIssueDetailPage = (issueId: number) =>
     navigate(`/issues/${issueId}`);
 
-  const isFilled = !!title;
+  const isFilled = !!newIssueInfo.title;
 
   const onAssigneeChange = (assignees: number[]) => {
-    setAssignees(assignees);
+    setNewIssueInfo((prev) => ({ ...prev, assignees }));
   };
 
   const onLabelChange = (labels: number[]) => {
-    setLabels(labels);
+    setNewIssueInfo((prev) => ({ ...prev, labels }));
   };
 
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const targetValue = e.target.value;
-    setTitle(targetValue);
+    setNewIssueInfo((prev) => ({ ...prev, title: targetValue }));
   };
 
   const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const targetValue = e.target.value;
-    setContent(targetValue);
+    setNewIssueInfo((prev) => ({ ...prev, content: targetValue }));
   };
 
   const appendContent = (content: string) => {
-    setContent((prev) => `${prev} ${content}`);
+    setNewIssueInfo((prev) => ({
+      ...prev,
+      content: `${prev.content} ${content}`,
+    }));
   };
 
   const onMilestoneChange = (milestone: number) => {
-    setMilestoneId(milestone);
+    setNewIssueInfo((prev) => ({ ...prev, milestone }));
   };
 
   const onIssueSubmit = async () => {
     const {
       data: { issueId },
-    } = await postIssue({
-      title,
-      content,
-      assignees,
-      labels,
-      milestone: milestoneId,
-    });
+    } = await postIssue(newIssueInfo);
     if (issueId) {
       moveIssueDetailPage(issueId);
     }
@@ -81,7 +87,7 @@ export default function NewIssuePage() {
             name="title"
             variant="tall"
             placeholder="제목"
-            value={title}
+            value={newIssueInfo.title}
             hasError={!isFilled}
             helpText="이슈 제목은 필수로 입력해주세요!"
             onChange={onTitleChange}
@@ -89,7 +95,7 @@ export default function NewIssuePage() {
           <TextArea
             name="comment"
             placeholder="코멘트를 입력하세요"
-            value={content}
+            value={newIssueInfo.content}
             rows={30}
             onChange={onContentChange}
             appendContent={appendContent}
@@ -98,9 +104,9 @@ export default function NewIssuePage() {
         <div>
           <Sidebar
             {...{
-              assignees,
-              labels,
-              milestoneId,
+              assignees: newIssueInfo.assignees,
+              labels: newIssueInfo.labels,
+              milestone: newIssueInfo.milestone,
               onAssigneeChange,
               onLabelChange,
               onMilestoneChange,

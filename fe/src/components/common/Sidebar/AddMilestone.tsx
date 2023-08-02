@@ -12,10 +12,10 @@ type MilestoneMap = {
 };
 
 export default function AddMilestone({
-  milestoneId,
+  milestone: milestoneId,
   onMilestoneChange,
 }: {
-  milestoneId: number;
+  milestone: number;
   onMilestoneChange: (milestoneId: number) => void;
 }) {
   const milestonesList = useFetch<Milestone[]>([], getMilestones);

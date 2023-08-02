@@ -6,14 +6,14 @@ import AddMilestone from "./AddMilestone";
 export default function Sidebar({
   assignees,
   labels,
-  milestoneId,
+  milestone,
   onAssigneeChange,
   onLabelChange,
   onMilestoneChange,
 }: {
   assignees: number[];
   labels: number[];
-  milestoneId: number;
+  milestone: number;
   onAssigneeChange: (assignees: number[]) => void;
   onLabelChange: (labels: number[]) => void;
   onMilestoneChange: (milestone: number) => void;
@@ -22,7 +22,7 @@ export default function Sidebar({
     <StyledSidebar>
       <AddAssignee {...{ assignees, onAssigneeChange }} />
       <AddLabel {...{ labels, onLabelChange }} />
-      <AddMilestone {...{ milestoneId, onMilestoneChange }} />
+      <AddMilestone {...{ milestone, onMilestoneChange }} />
     </StyledSidebar>
   );
 }

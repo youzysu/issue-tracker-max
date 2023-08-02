@@ -33,3 +33,11 @@ export type User = {
   username: string;
   profileUrl: string;
 };
+
+export type NewIssueInfo = {
+  title: string;
+  content: string;
+  assignees: number[];
+  labels: number[];
+  milestone: number;
+};
