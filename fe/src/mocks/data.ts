@@ -19,14 +19,14 @@ export const milestoneList = [
   {
     milestoneId: 1,
     milestoneName: "Sprint #1",
-    openIssueCount: 1,
-    closedIssueCount: 0,
+    openIssueCount: 5,
+    closedIssueCount: 1,
   },
   {
     milestoneId: 2,
     milestoneName: "Sprint #2",
-    openIssueCount: 2,
-    closedIssueCount: 0,
+    openIssueCount: 4,
+    closedIssueCount: 10,
   },
 ];
 

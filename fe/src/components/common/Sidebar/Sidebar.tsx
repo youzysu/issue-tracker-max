@@ -1,23 +1,28 @@
 import styled from "styled-components";
 import AddAssignee from "./AddAssignee";
 import AddLabel from "./AddLabel";
+import AddMilestone from "./AddMilestone";
 
 export default function Sidebar({
   assignees,
   labels,
+  milestoneId,
   onAssigneeChange,
   onLabelChange,
+  onMilestoneChange,
 }: {
   assignees: number[];
   labels: number[];
+  milestoneId: number;
   onAssigneeChange: (assignees: number[]) => void;
   onLabelChange: (labels: number[]) => void;
+  onMilestoneChange: (milestone: number) => void;
 }) {
   return (
     <StyledSidebar>
       <AddAssignee {...{ assignees, onAssigneeChange }} />
       <AddLabel {...{ labels, onLabelChange }} />
-      {/* <AddMilestone /> */}
+      <AddMilestone {...{ milestoneId, onMilestoneChange }} />
     </StyledSidebar>
   );
 }

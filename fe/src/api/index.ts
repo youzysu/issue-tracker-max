@@ -36,7 +36,6 @@ export const postIssue = async (body: PostIssueBody) => {
 export const postImage = async (file: File) => {
   const formData = new FormData();
   formData.append("image", file);
-  console.log(formData);
 
   return await fetcherFormDataWithBearer.post<{ fileUrl: string }>(
     "/upload",

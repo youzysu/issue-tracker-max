@@ -15,6 +15,7 @@ export default function NewIssuePage() {
   const [content, setContent] = useState<string>("");
   const [assignees, setAssignees] = useState<number[]>([]);
   const [labels, setLabels] = useState<number[]>([]);
+  const [milestoneId, setMilestoneId] = useState<number>(0);
 
   const { userInfo } = useAuth();
 
@@ -47,6 +48,10 @@ export default function NewIssuePage() {
     setContent((prev) => `${prev} ${content}`);
   };
 
+  const onMilestoneChange = (milestone: number) => {
+    setMilestoneId(milestone);
+  };
+
   const onIssueSubmit = async () => {
     const {
       data: { issueId },
@@ -55,6 +60,7 @@ export default function NewIssuePage() {
       content,
       assignees,
       labels,
+      milestone: milestoneId,
     });
     if (issueId) {
       moveIssueDetailPage(issueId);
@@ -91,7 +97,14 @@ export default function NewIssuePage() {
         </div>
         <div>
           <Sidebar
-            {...{ assignees, labels, onAssigneeChange, onLabelChange }}
+            {...{
+              assignees,
+              labels,
+              milestoneId,
+              onAssigneeChange,
+              onLabelChange,
+              onMilestoneChange,
+            }}
           />
         </div>
       </div>
