@@ -66,19 +66,19 @@ export const handlers = [
     );
   }),
 
-  rest.get("/api/issues", async (_req, res, ctx) => {
+  rest.get("/api/issues", async (_, res, ctx) => {
     return res(ctx.status(200), ctx.json(issueList));
   }),
 
-  rest.get("/api/labels", async (_req, res, ctx) => {
+  rest.get("/api/labels", async (_, res, ctx) => {
     return res(ctx.status(200), ctx.json(labelList));
   }),
 
-  rest.get("/api/milestones", async (_req, res, ctx) => {
+  rest.get("/api/milestones", async (_, res, ctx) => {
     return res(ctx.status(200), ctx.json(milestoneList));
   }),
 
-  rest.get("/api/users", async (_req, res, ctx) => {
+  rest.get("/api/users", async (_, res, ctx) => {
     return res(ctx.status(200), ctx.json(users));
   }),
 
@@ -97,6 +97,13 @@ export const handlers = [
       createdAt: new Date().toISOString(),
     });
     return res(ctx.status(200), ctx.json({ issueId: issueList.length + 1 }));
+  }),
+
+  rest.post("/api/upload", async (_, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({ fileUrl: "https://i.imgur.com/1.jpg" })
+    );
   }),
 ];
 

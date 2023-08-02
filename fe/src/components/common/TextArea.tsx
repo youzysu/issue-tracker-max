@@ -1,17 +1,36 @@
 import paperClipIcon from "@assets/icon/paperclip.svg";
+import { postImage } from "api";
 import styled from "styled-components";
 import { Label } from "./Label";
 
 export default function TextArea({
   name,
   value,
+  appendContent,
   ...props
-}: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+}: {
+  appendContent: (content: string) => void;
+} & React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  const onFileInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const file = files[0];
+    const filename = file.name;
+
+    const {
+      data: { fileUrl },
+    } = await postImage(file);
+    if (fileUrl) {
+      appendContent(`![${filename}](${fileUrl})`);
+    }
+  };
+
   return (
     <TextAreaContainer>
       {value && <Label htmlFor={name}>{props.placeholder}</Label>}
-      <StyledTextArea id={name} {...props} />
-      <FileUploadButton>
+      <StyledTextArea id={name} value={value} {...props} />
+      <FileUploadWrapper>
         <Label className="file-upload-label" htmlFor="file-upload-input">
           <img
             className="file-upload-icon"
@@ -19,9 +38,13 @@ export default function TextArea({
             alt="파일 첨부 아이콘"
           />
           파일 첨부하기
+          <input
+            type="file"
+            id="file-upload-input"
+            onChange={onFileInputChange}
+          />
         </Label>
-        <input type="file" id="file-upload-input" />
-      </FileUploadButton>
+      </FileUploadWrapper>
     </TextAreaContainer>
   );
 }
@@ -30,7 +53,6 @@ const TextAreaContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
   justify-content: "center";
   padding: 16px;
   gap: 8px;
@@ -50,7 +72,6 @@ const TextAreaContainer = styled.div`
 const StyledTextArea = styled.textarea`
   display: flex;
   width: 100%;
-  height: 100%;
   color: ${({ theme: { neutral } }) => neutral.text.default};
   font: ${({ theme: { font } }) => font.displayMD16};
   caret-color: ${({ theme: { palette } }) => palette.blue};
@@ -62,7 +83,10 @@ const StyledTextArea = styled.textarea`
   }
 `;
 
-const FileUploadButton = styled.div`
+const FileUploadWrapper = styled.div`
+  border-top: ${({ theme: { border, neutral } }) =>
+    `${border.dash} ${neutral.border.default}`};
+
   .file-upload-label {
     gap: 4px;
   }

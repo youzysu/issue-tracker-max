@@ -1,5 +1,9 @@
 import { IssueItem, Label, Milestone, User } from "@customTypes/index";
-import { fetcher, fetcherWithBearer } from "./fetcher";
+import {
+  fetcher,
+  fetcherFormDataWithBearer,
+  fetcherWithBearer,
+} from "./fetcher";
 
 export const postSignup = async (username: string, password: string) => {
   return await fetcher.post("/auth/signup", { username, password });
@@ -27,6 +31,17 @@ export const getUsers = async () => {
 
 export const postIssue = async (body: PostIssueBody) => {
   return await fetcherWithBearer.post<{ issueId: number }>("/issues", body);
+};
+
+export const postImage = async (file: File) => {
+  const formData = new FormData();
+  formData.append("image", file);
+  console.log(formData);
+
+  return await fetcherFormDataWithBearer.post<{ fileUrl: string }>(
+    "/upload",
+    formData
+  );
 };
 
 type PostIssueBody = {

@@ -38,9 +38,13 @@ export default function NewIssuePage() {
     setTitle(targetValue);
   };
 
-  const onCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const targetValue = e.target.value;
     setContent(targetValue);
+  };
+
+  const appendContent = (content: string) => {
+    setContent((prev) => `${prev} ${content}`);
   };
 
   const onIssueSubmit = async () => {
@@ -60,7 +64,6 @@ export default function NewIssuePage() {
   return (
     <StyledNewIssuePage>
       <Title>새로운 이슈 작성</Title>
-      <Line />
       <div className="wrapper">
         <Avatar
           src={userInfo.profileUrl}
@@ -82,7 +85,8 @@ export default function NewIssuePage() {
             placeholder="코멘트를 입력하세요"
             value={content}
             rows={30}
-            onChange={onCommentChange}
+            onChange={onContentChange}
+            appendContent={appendContent}
           />
         </div>
         <div>
@@ -92,7 +96,6 @@ export default function NewIssuePage() {
         </div>
       </div>
 
-      <Line />
       <footer className="footer">
         <Button variant="ghost" size="M" onClick={moveMainPage}>
           <img src={XIcon} alt="" />
@@ -116,15 +119,15 @@ const StyledNewIssuePage = styled.div`
   flex-direction: column;
   gap: 24px;
 
-  .line {
-    border-bottom: ${({ theme: { border, neutral } }) =>
-      `${border.default} ${neutral.border.default}`};
-  }
-
   .wrapper {
     display: flex;
     width: 100%;
     gap: 24px;
+    padding: 24px 0;
+    border-bottom: ${({ theme: { border, neutral } }) =>
+      `${border.default} ${neutral.border.default}`};
+    border-top: ${({ theme: { border, neutral } }) =>
+      `${border.default} ${neutral.border.default}`};
   }
 
   .form {
@@ -141,12 +144,7 @@ const StyledNewIssuePage = styled.div`
   }
 `;
 
-const Title = styled.span`
+const Title = styled.h1`
   font: ${({ theme: { font } }) => font.displayBold32};
   color: ${({ theme: { neutral } }) => neutral.text.strong};
-`;
-
-const Line = styled.div`
-  border-bottom: ${({ theme: { border, neutral } }) =>
-    `${border.default} ${neutral.border.default}`};
 `;
