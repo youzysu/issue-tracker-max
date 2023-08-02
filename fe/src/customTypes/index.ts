@@ -17,15 +17,16 @@ export type Assignee = {
   profileUrl: string;
 };
 
+// TODO: labels, milestone, assignees optional 처리 필요
 export type IssueItem = {
   issueNumber: number;
   isOpen: boolean;
   title: string;
   authorName: string;
   createdAt: string;
-  labels?: Label[];
-  milestone?: string;
-  assignees?: Assignee[];
+  labels: Label[];
+  milestone: string;
+  assignees: Assignee[];
 };
 
 export type User = {

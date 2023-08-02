@@ -12,12 +12,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export default function NewIssuePage() {
-  // const [title, setTitle] = useState<string>("");
-  // const [content, setContent] = useState<string>("");
-  // const [assignees, setAssignees] = useState<number[]>([]);
-  // const [labels, setLabels] = useState<number[]>([]);
-  // const [milestoneId, setMilestoneId] = useState<number>(0);
-
   const [newIssueInfo, setNewIssueInfo] = useState<NewIssueInfo>({
     title: "",
     content: "",
