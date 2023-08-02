@@ -1,4 +1,5 @@
 import DropdownIndicator from "@components/Dropdown/DropdownIndicator";
+import { DropdownItemType } from "@components/Dropdown/types";
 import { User } from "@customTypes/index";
 import useFetch from "@hooks/useFetch";
 import { getUsers } from "api";
@@ -24,8 +25,7 @@ export default function AddAssignee({
     return map;
   }, {});
 
-  // TODO: dropdownList variant string type error 해결하기
-  const assigneeDropdownList = userList.map((user) => ({
+  const assigneeDropdownList: DropdownItemType[] = userList.map((user) => ({
     id: user.userAccountId,
     variant: "withImg",
     name: "assignee",
@@ -57,7 +57,6 @@ export default function AddAssignee({
         dropdownName="assignee"
         dropdownList={assigneeDropdownList}
         dropdownPanelPosition="right"
-        selectType="multiple"
       />
       {generateAssignees()}
     </CheckGroup>

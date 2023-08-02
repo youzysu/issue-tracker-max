@@ -1,4 +1,5 @@
 import DropdownIndicator from "@components/Dropdown/DropdownIndicator";
+import { DropdownItemType } from "@components/Dropdown/types";
 import LabelTag from "@components/LabelTag";
 import { Label } from "@customTypes/index";
 import useFetch from "@hooks/useFetch";
@@ -23,7 +24,7 @@ export default function AddLabel({
     return map;
   }, {});
 
-  const labelDropdownList = labelList.map((label) => ({
+  const labelDropdownList: DropdownItemType[] = labelList.map((label) => ({
     id: label.labelId,
     variant: "withColor",
     name: "label",
@@ -45,7 +46,6 @@ export default function AddLabel({
         dropdownName="label"
         dropdownList={labelDropdownList}
         dropdownPanelPosition="right"
-        selectType="multiple"
       />
       {!!labels.length && <Wrapper>{generateLabels()}</Wrapper>}
     </CheckGroup>

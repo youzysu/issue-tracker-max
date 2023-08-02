@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import AddAssignee from "./AddAssignee";
 import AddLabel from "./AddLabel";
-import AddMilestone from "./AddMilestone";
 
 export default function Sidebar({
   assignees,
@@ -18,7 +17,7 @@ export default function Sidebar({
     <StyledSidebar>
       <AddAssignee {...{ assignees, onAssigneeChange }} />
       <AddLabel {...{ labels, onLabelChange }} />
-      <AddMilestone />
+      {/* <AddMilestone /> */}
     </StyledSidebar>
   );
 }
