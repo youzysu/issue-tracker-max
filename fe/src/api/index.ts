@@ -1,12 +1,12 @@
 import { IssueItem, Label, Milestone, User } from "@customTypes/index";
 import { fetcher, fetcherWithBearer } from "./fetcher";
 
-export const postSignup = async (loginId: string, password: string) => {
-  return await fetcher.post("/auth/signup", { loginId, password });
+export const postSignup = async (username: string, password: string) => {
+  return await fetcher.post("/auth/signup", { username, password });
 };
 
-export const postLogin = async (loginId: string, password: string) => {
-  return await fetcher.post("/auth/login", { loginId, password });
+export const postLogin = async (username: string, password: string) => {
+  return await fetcher.post("/auth/login", { username, password });
 };
 
 export const getIssues = async () => {

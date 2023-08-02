@@ -2,15 +2,15 @@ import { rest } from "msw";
 import { issueList, labelList, loginInfo, milestoneList, users } from "./data";
 
 type AuthRequestBody = {
-  loginId: string;
+  username: string;
   password: string;
 };
 
 export const handlers = [
   rest.post("/api/auth/signup", async (req, res, ctx) => {
-    const { loginId, password } = await req.json<AuthRequestBody>();
-    const isExist = loginInfo[loginId];
-    loginInfo[loginId] = password;
+    const { username, password } = await req.json<AuthRequestBody>();
+    const isExist = loginInfo[username];
+    loginInfo[username] = password;
 
     if (isExist) {
       return res(
@@ -26,9 +26,9 @@ export const handlers = [
   }),
 
   rest.post("/api/auth/login", async (req, res, ctx) => {
-    const { loginId, password } = await req.json<AuthRequestBody>();
-    const isExist = loginInfo[loginId];
-    const isCorrectPassword = loginInfo[loginId] === password;
+    const { username, password } = await req.json<AuthRequestBody>();
+    const isExist = loginInfo[username];
+    const isCorrectPassword = loginInfo[username] === password;
 
     if (!isExist) {
       return res(
@@ -59,7 +59,7 @@ export const handlers = [
           expiresIn: 48000000,
         },
         user: {
-          loginId: loginId,
+          username: username,
           profileUrl: "https://avatars.githubusercontent.com/u/48426991?v=4",
         },
       })

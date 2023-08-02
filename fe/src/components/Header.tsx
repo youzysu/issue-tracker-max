@@ -23,7 +23,7 @@ export default function Header() {
         />
         <Avatar
           src={userInfo.profileUrl}
-          alt={`${userInfo.loginId}-avatar`}
+          alt={`${userInfo.username}-avatar`}
           $size="M"
         />
       </div>

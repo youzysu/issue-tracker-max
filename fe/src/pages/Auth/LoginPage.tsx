@@ -9,7 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export default function LoginPage() {
-  const { isValid: isValidLoginId, ...loginId } = useInput({
+  const { isValid: isValidUsername, ...username } = useInput({
     initialValue: "",
     maxLength: 16,
     minLength: 6,
@@ -29,7 +29,7 @@ export default function LoginPage() {
     try {
       const {
         data: { token, user },
-      } = await postLogin(loginId.value, password.value);
+      } = await postLogin(username.value, password.value);
       onLogin({ accessToken: token.accessToken, userInfo: user });
       navigate("/");
     } catch (error) {
@@ -50,10 +50,10 @@ export default function LoginPage() {
         <TextInput
           name="아이디"
           variant="tall"
-          hasError={!isValidLoginId}
+          hasError={!isValidUsername}
           placeholder="아이디"
           helpText="아이디는 최소 6자리여야 해요!"
-          {...loginId}
+          {...username}
         />
         <TextInput
           name="비밀번호"
@@ -69,7 +69,7 @@ export default function LoginPage() {
           variant="container"
           size="XL"
           className="login-btn"
-          disabled={!isValidLoginId || !isValidPassword}
+          disabled={!isValidUsername || !isValidPassword}
           type="submit">
           아이디로 로그인
         </Button>

@@ -64,7 +64,7 @@ export default function NewIssuePage() {
       <div className="wrapper">
         <Avatar
           src={userInfo.profileUrl}
-          alt={`${userInfo.loginId}-avatar`}
+          alt={`${userInfo.username}-avatar`}
           $size="M"
         />
         <div className="form">
