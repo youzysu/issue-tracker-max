@@ -1,5 +1,8 @@
+import GripIcon from "@assets/icon/grip.svg";
 import paperClipIcon from "@assets/icon/paperclip.svg";
 import { postImage } from "api";
+import { debounce } from "lodash";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Label } from "./Label";
 
@@ -9,8 +12,36 @@ export default function TextArea({
   appendContent,
   ...props
 }: {
+  value: string;
   appendContent: (content: string) => void;
 } & React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  const [isCharCountShown, setIsCharCountShown] = useState(false);
+  const charCountMessage = value && `띄어쓰기 포함 ${value.length}자`;
+
+  useEffect(() => {
+    const CHAR_SHOW_TIME = 2000;
+    const DEBOUNCE_TIME = 500;
+
+    const handleCharCountShown = () => {
+      setIsCharCountShown(true);
+
+      setTimeout(() => {
+        setIsCharCountShown(false);
+      }, CHAR_SHOW_TIME);
+    };
+
+    const debouncedHandleCharCountShown = debounce(
+      handleCharCountShown,
+      DEBOUNCE_TIME
+    );
+
+    if (value) {
+      debouncedHandleCharCountShown();
+    }
+
+    return () => debouncedHandleCharCountShown.cancel();
+  }, [value]);
+
   const onFileInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
@@ -28,8 +59,16 @@ export default function TextArea({
 
   return (
     <TextAreaContainer>
-      {value && <Label htmlFor={name}>{props.placeholder}</Label>}
-      <StyledTextArea id={name} value={value} {...props} />
+      <TextWrapper>
+        {value && <Label htmlFor={name}>{props.placeholder}</Label>}
+        <StyledTextArea id={name} value={value} {...props} />
+        <div className="caption">
+          {isCharCountShown && (
+            <CharCountText>{charCountMessage}</CharCountText>
+          )}
+          <img src={GripIcon} alt="grip-icon" />
+        </div>
+      </TextWrapper>
       <FileUploadWrapper>
         <Label className="file-upload-label" htmlFor="file-upload-input">
           <img
@@ -52,10 +91,7 @@ export default function TextArea({
 const TextAreaContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
   justify-content: "center";
-  padding: 16px;
-  gap: 8px;
   color: ${({ theme: { neutral } }) => neutral.text.weak};
   border-radius: ${({ theme: { radius } }) => `${radius.l}`};
   background-color: ${({ theme: { neutral } }) => neutral.surface.bold};
@@ -69,25 +105,75 @@ const TextAreaContainer = styled.div`
   }
 `;
 
-const StyledTextArea = styled.textarea`
+const TextWrapper = styled.div`
   display: flex;
-  width: 100%;
-  color: ${({ theme: { neutral } }) => neutral.text.default};
-  font: ${({ theme: { font } }) => font.displayMD16};
-  caret-color: ${({ theme: { palette } }) => palette.blue};
-  &::placeholder {
-    color: ${({ theme: { neutral } }) => neutral.text.weak};
-  }
-  &:focus {
-    color: ${({ theme: { neutral } }) => neutral.text.strong};
+  flex-direction: column;
+  padding: 16px;
+  gap: 8px;
+  border-bottom: ${({ theme: { border, neutral } }) =>
+    `${border.dashed} ${neutral.border.default}`};
+
+  .caption {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
   }
 `;
 
+const StyledTextArea = styled.textarea`
+  display: flex;
+  color: ${({ theme: { neutral } }) => neutral.text.default};
+  font: ${({ theme: { font } }) => font.displayMD16};
+  caret-color: ${({ theme: { palette } }) => palette.blue};
+
+  &::placeholder {
+    color: ${({ theme: { neutral } }) => neutral.text.weak};
+  }
+
+  &:focus {
+    color: ${({ theme: { neutral } }) => neutral.text.strong};
+  }
+
+  &::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    outline: none;
+    border-radius: 10px;
+    border: 4px solid transparent;
+    box-shadow: ${({ theme: { neutral } }) =>
+      `inset 6px 6px 0 ${neutral.border.default}`};
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    border: 4px solid transparent;
+    box-shadow: ${({ theme: { neutral } }) =>
+      `inset 6px 6px 0 ${neutral.border.defaultActive}`};
+  }
+
+  &::-webkit-scrollbar-track {
+    box-shadow: none;
+    background-color: transparent;
+  }
+`;
+
+const CharCountText = styled.span`
+  display: flex;
+  justify-content: flex-end;
+  color: ${({ theme: { neutral } }) => neutral.text.weak};
+  font: ${({ theme: { font } }) => font.displayMD12};
+`;
+
 const FileUploadWrapper = styled.div`
-  border-top: ${({ theme: { border, neutral } }) =>
-    `${border.dash} ${neutral.border.default}`};
+  width: 100%;
+  height: 52px;
+  display: flex;
+  padding: 0 16px;
 
   .file-upload-label {
+    width: 100%;
     gap: 4px;
   }
 

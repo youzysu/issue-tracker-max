@@ -59,11 +59,7 @@ export default createGlobalStyle`
   }
 
   textarea {
-    background-color: transparent;
-    border: none;
-    &:focus {
-      outline: none;
-    }
+    all: unset;
   }
   
   select {
