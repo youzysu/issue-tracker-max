@@ -1,7 +1,7 @@
 name: Front Deployment
 
 on:
-  push:
+  pull_request:
     branches:
       - fe-release
 
