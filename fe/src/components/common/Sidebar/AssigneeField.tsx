@@ -5,26 +5,17 @@ import useFetch from "@hooks/useFetch";
 import { getUsers } from "api";
 import styled from "styled-components";
 import { Avatar } from "../Avatar";
-import CheckboxGroup from "./CheckboxGroup";
-import { Container } from "./common";
+import CheckboxGroup from "../Group/CheckboxGroup";
+import { Container } from "./Container";
 
-type UserMap = {
-  [key: number]: User;
-};
-
-export default function AddAssignee({
+export default function AssigneeField({
   assignees,
   onAssigneeChange,
 }: {
-  assignees: number[];
-  onAssigneeChange: (assignees: number[]) => void;
+  assignees: Set<number>;
+  onAssigneeChange: (assignees: Set<number>) => void;
 }) {
   const userList = useFetch<User[]>([], getUsers);
-
-  const userMap: UserMap = userList.reduce((map: UserMap, user: User) => {
-    map[user.userAccountId] = user;
-    return map;
-  }, {});
 
   const assigneeDropdownList: DropdownItemType[] = userList.map((user) => ({
     id: user.userAccountId,
@@ -35,16 +26,19 @@ export default function AddAssignee({
   }));
 
   const generateAssignees = () => {
-    return assignees.map((assignee) => {
-      const currentAssignee = userMap[assignee];
+    const currentAssignees = userList.filter((user) =>
+      assignees.has(user.userAccountId)
+    );
+
+    return currentAssignees.map((assignee) => {
       return (
-        <Wrapper key={currentAssignee.userAccountId}>
+        <Wrapper key={assignee.userAccountId}>
           <Avatar
-            src={currentAssignee.profileUrl}
-            alt={`${currentAssignee.username}`}
+            src={assignee.profileUrl}
+            alt={`${assignee.username}`}
             $size="S"
           />
-          <Content>{currentAssignee.username}</Content>
+          <Content>{assignee.username}</Content>
         </Wrapper>
       );
     });

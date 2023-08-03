@@ -5,25 +5,17 @@ import { Label } from "@customTypes/index";
 import useFetch from "@hooks/useFetch";
 import { getLabels } from "api";
 import styled from "styled-components";
-import CheckboxGroup from "./CheckboxGroup";
-import { Container } from "./common";
+import CheckboxGroup from "../Group/CheckboxGroup";
+import { Container } from "./Container";
 
-type LabelMap = {
-  [key: number]: Label;
-};
-
-export default function AddLabel({
+export default function LabelField({
   labels,
   onLabelChange,
 }: {
-  labels: number[];
-  onLabelChange: (labels: number[]) => void;
+  labels: Set<number>;
+  onLabelChange: (labels: Set<number>) => void;
 }) {
   const labelList = useFetch<Label[]>([], getLabels);
-  const labelMap: LabelMap = labelList.reduce((map: LabelMap, label: Label) => {
-    map[label.labelId] = label;
-    return map;
-  }, {});
 
   const labelDropdownList: DropdownItemType[] = labelList.map((label) => ({
     id: label.labelId,
@@ -34,8 +26,11 @@ export default function AddLabel({
   }));
 
   const generateLabels = () => {
-    return labels.map((label) => {
-      return <LabelTag key={label} label={labelMap[label]} />;
+    const currentLabels = labelList.filter((label) =>
+      labels.has(label.labelId)
+    );
+    return currentLabels.map((label) => {
+      return <LabelTag key={label.labelId} label={label} />;
     });
   };
 
@@ -51,7 +46,7 @@ export default function AddLabel({
           dropdownOption="multiple"
         />
       </CheckboxGroup>
-      {!!labels.length && <Wrapper>{generateLabels()}</Wrapper>}
+      {!!labels.size && <Wrapper>{generateLabels()}</Wrapper>}
     </Container>
   );
 }

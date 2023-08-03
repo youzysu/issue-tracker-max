@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import AddAssignee from "./AddAssignee";
-import AddLabel from "./AddLabel";
-import AddMilestone from "./AddMilestone";
+import AssigneeField from "./AssigneeField";
+import LabelField from "./LabelField";
+import MilestoneField from "./MilestoneField";
 
 export default function Sidebar({
   assignees,
@@ -11,18 +11,18 @@ export default function Sidebar({
   onLabelChange,
   onMilestoneChange,
 }: {
-  assignees: number[];
-  labels: number[];
+  assignees: Set<number>;
+  labels: Set<number>;
   milestone: number;
-  onAssigneeChange: (assignees: number[]) => void;
-  onLabelChange: (labels: number[]) => void;
+  onAssigneeChange: (assignees: Set<number>) => void;
+  onLabelChange: (labels: Set<number>) => void;
   onMilestoneChange: (milestone: number) => void;
 }) {
   return (
     <StyledSidebar>
-      <AddAssignee {...{ assignees, onAssigneeChange }} />
-      <AddLabel {...{ labels, onLabelChange }} />
-      <AddMilestone {...{ milestone, onMilestoneChange }} />
+      <AssigneeField {...{ assignees, onAssigneeChange }} />
+      <LabelField {...{ labels, onLabelChange }} />
+      <MilestoneField {...{ milestone, onMilestoneChange }} />
     </StyledSidebar>
   );
 }

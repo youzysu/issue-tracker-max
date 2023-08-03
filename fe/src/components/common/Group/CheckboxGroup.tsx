@@ -1,5 +1,5 @@
 import { CheckboxContext, checkFn, toggleFn } from "context/checkboxContext";
-import { Fieldset } from "./common";
+import { Fieldset } from "./Fieldset";
 
 export default function CheckboxGroup({
   children,
@@ -7,15 +7,16 @@ export default function CheckboxGroup({
   onChange,
 }: {
   children: React.ReactNode;
-  values: number[];
-  onChange: (values: number[]) => void;
+  values: Set<number>;
+  onChange: (values: Set<number>) => void;
 }) {
-  const isChecked: checkFn = (value) => values.includes(value);
+  const isChecked: checkFn = (value) => values.has(value);
   const toggleCheck: toggleFn = ({ checked, value }) => {
     if (checked) {
-      onChange([...values, value]);
+      onChange(values.add(value));
     } else {
-      onChange(values.filter((v) => v !== value));
+      values.delete(value);
+      onChange(values);
     }
   };
 

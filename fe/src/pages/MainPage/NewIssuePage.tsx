@@ -15,10 +15,12 @@ export default function NewIssuePage() {
   const [newIssueInfo, setNewIssueInfo] = useState<NewIssueInfo>({
     title: "",
     content: "",
-    assignees: [],
-    labels: [],
+    assignees: new Set<number>(),
+    labels: new Set<number>(),
     milestone: 0,
   });
+
+  console.log(newIssueInfo);
 
   const { userInfo } = useAuth();
 
@@ -28,14 +30,6 @@ export default function NewIssuePage() {
     navigate(`/issues/${issueId}`);
 
   const isFilled = !!newIssueInfo.title;
-
-  const onAssigneeChange = (assignees: number[]) => {
-    setNewIssueInfo((prev) => ({ ...prev, assignees }));
-  };
-
-  const onLabelChange = (labels: number[]) => {
-    setNewIssueInfo((prev) => ({ ...prev, labels }));
-  };
 
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const targetValue = e.target.value;
@@ -54,6 +48,14 @@ export default function NewIssuePage() {
     }));
   };
 
+  const onAssigneeChange = (assignees: Set<number>) => {
+    setNewIssueInfo((prev) => ({ ...prev, assignees }));
+  };
+
+  const onLabelChange = (labels: Set<number>) => {
+    setNewIssueInfo((prev) => ({ ...prev, labels }));
+  };
+
   const onMilestoneChange = (milestone: number) => {
     setNewIssueInfo((prev) => ({ ...prev, milestone }));
   };
@@ -61,7 +63,13 @@ export default function NewIssuePage() {
   const onIssueSubmit = async () => {
     const {
       data: { issueId },
-    } = await postIssue(newIssueInfo);
+    } = await postIssue({
+      title: newIssueInfo.title,
+      content: newIssueInfo.content,
+      assignees: [...newIssueInfo.assignees],
+      labels: [...newIssueInfo.labels],
+      milestone: newIssueInfo.milestone,
+    });
     if (issueId) {
       moveIssueDetailPage(issueId);
     }

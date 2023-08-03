@@ -1,6 +1,6 @@
 import { RadioContext } from "context/radioContext";
 import { ReactNode } from "react";
-import { Fieldset } from "./common";
+import { Fieldset } from "./Fieldset";
 
 export default function RadioGroup({
   children,

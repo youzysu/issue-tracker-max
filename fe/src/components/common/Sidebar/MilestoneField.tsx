@@ -3,15 +3,15 @@ import { DropdownItemType } from "@components/Dropdown/types";
 import { Milestone } from "@customTypes/index";
 import useFetch from "@hooks/useFetch";
 import { getMilestones } from "api";
+import RadioGroup from "../Group/RadioGroup";
 import ProgressBar from "../ProgressBar";
-import RadioGroup from "./RadioGroup";
-import { Container } from "./common";
+import { Container } from "./Container";
 
 type MilestoneMap = {
   [key: number]: Milestone;
 };
 
-export default function AddMilestone({
+export default function MilestoneField({
   milestone: milestoneId,
   onMilestoneChange,
 }: {

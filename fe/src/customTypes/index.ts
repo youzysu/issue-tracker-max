@@ -38,7 +38,7 @@ export type User = {
 export type NewIssueInfo = {
   title: string;
   content: string;
-  assignees: number[];
-  labels: number[];
+  assignees: Set<number>;
+  labels: Set<number>;
   milestone: number;
 };

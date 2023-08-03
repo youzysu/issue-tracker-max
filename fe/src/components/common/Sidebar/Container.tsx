@@ -7,11 +7,3 @@ export const Container = styled.div`
   flex-direction: column;
   gap: 16px;
 `;
-
-export const Fieldset = styled.fieldset`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  border: none;
-`;

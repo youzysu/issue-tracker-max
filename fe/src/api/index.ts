@@ -1,10 +1,4 @@
-import {
-  IssueItem,
-  Label,
-  Milestone,
-  NewIssueInfo,
-  User,
-} from "@customTypes/index";
+import { IssueItem, Label, Milestone, User } from "@customTypes/index";
 import {
   fetcher,
   fetcherFormDataWithBearer,
@@ -35,11 +29,16 @@ export const getUsers = async () => {
   return await fetcherWithBearer.get<User[]>("/users");
 };
 
-export const postIssue = async (newIssueInfo: NewIssueInfo) => {
-  return await fetcherWithBearer.post<{ issueId: number }>(
-    "/issues",
-    newIssueInfo
-  );
+type NewIssueBody = {
+  title: string;
+  content: string;
+  assignees: number[];
+  labels: number[];
+  milestone: number;
+};
+
+export const postIssue = async (body: NewIssueBody) => {
+  return await fetcherWithBearer.post<{ issueId: number }>("/issues", body);
 };
 
 export const postImage = async (file: File) => {
