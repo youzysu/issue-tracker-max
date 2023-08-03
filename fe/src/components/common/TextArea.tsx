@@ -16,20 +16,9 @@ export default function TextArea({
   appendContent: (content: string) => void;
 } & React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   const [isCharCountShown, setIsCharCountShown] = useState(false);
-  const charCountMessage = value && `띄어쓰기 포함 ${value.length}자`;
 
   useEffect(() => {
-    const CHAR_SHOW_TIME = 2000;
     const DEBOUNCE_TIME = 500;
-
-    const handleCharCountShown = () => {
-      setIsCharCountShown(true);
-
-      setTimeout(() => {
-        setIsCharCountShown(false);
-      }, CHAR_SHOW_TIME);
-    };
-
     const debouncedHandleCharCountShown = debounce(
       handleCharCountShown,
       DEBOUNCE_TIME
@@ -41,6 +30,17 @@ export default function TextArea({
 
     return () => debouncedHandleCharCountShown.cancel();
   }, [value]);
+
+  const CHAR_SHOW_TIME = 2000;
+  const charCountMessage = value && `띄어쓰기 포함 ${value.length}자`;
+
+  const handleCharCountShown = () => {
+    setIsCharCountShown(true);
+
+    setTimeout(() => {
+      setIsCharCountShown(false);
+    }, CHAR_SHOW_TIME);
+  };
 
   const onFileInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
