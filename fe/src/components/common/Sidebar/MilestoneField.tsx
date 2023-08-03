@@ -7,10 +7,6 @@ import RadioGroup from "../Group/RadioGroup";
 import ProgressBar from "../ProgressBar";
 import { Container } from "./Container";
 
-type MilestoneMap = {
-  [key: number]: Milestone;
-};
-
 export default function MilestoneField({
   milestone: milestoneId,
   onMilestoneChange,
@@ -19,13 +15,6 @@ export default function MilestoneField({
   onMilestoneChange: (milestoneId: number) => void;
 }) {
   const milestonesList = useFetch<Milestone[]>([], getMilestones);
-  const milestoneMap: MilestoneMap = milestonesList.reduce(
-    (map: MilestoneMap, milestone: Milestone) => {
-      map[milestone.milestoneId] = milestone;
-      return map;
-    },
-    {}
-  );
 
   const milestoneDropdownList: DropdownItemType[] = milestonesList.map(
     (milestone) => ({
@@ -37,14 +26,18 @@ export default function MilestoneField({
   );
 
   const generateMilestone = () => {
-    const { milestoneName, openIssueCount, closedIssueCount } =
-      milestoneMap[milestoneId];
+    const milestone = milestonesList.find(
+      (milestone) => milestone.milestoneId === milestoneId
+    );
+
     return (
-      <ProgressBar
-        name={milestoneName}
-        openCount={openIssueCount}
-        closeCount={closedIssueCount}
-      />
+      milestone && (
+        <ProgressBar
+          name={milestone.milestoneName}
+          openCount={milestone.openIssueCount}
+          closeCount={milestone.closedIssueCount}
+        />
+      )
     );
   };
 
