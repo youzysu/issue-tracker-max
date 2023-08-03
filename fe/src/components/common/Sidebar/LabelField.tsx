@@ -11,9 +11,11 @@ import { Container } from "./Container";
 export default function LabelField({
   labels,
   onLabelChange,
+  onEditLabels,
 }: {
   labels: Set<number>;
   onLabelChange: (labels: Set<number>) => void;
+  onEditLabels?: () => void;
 }) {
   const labelList = useFetch<Label[]>([], getLabels);
 
@@ -44,6 +46,7 @@ export default function LabelField({
           dropdownList={labelDropdownList}
           dropdownPanelPosition="right"
           dropdownOption="multiple"
+          onEdit={onEditLabels}
         />
       </CheckboxGroup>
       {!!labels.size && <Wrapper>{generateLabels()}</Wrapper>}

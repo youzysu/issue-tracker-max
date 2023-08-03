@@ -116,6 +116,78 @@ export const handlers = [
       ctx.json({ fileUrl: "https://i.imgur.com/1.jpg" })
     );
   }),
+
+  rest.put("/api/issues/:issueId/assignees", async (req, res, ctx) => {
+    const { issueId } = req.params;
+    const { addUserAccountId, removeUserAccountId } = await req.json();
+
+    const issue = issueList.find((i) => i.issueNumber === Number(issueId));
+    if (!issue) {
+      return res(
+        ctx.status(404),
+        ctx.json({
+          errorCode: "ISSUE_NOT_FOUND",
+          message: "존재하지 않는 이슈입니다.",
+        })
+      );
+    }
+
+    issueDetail.assignees = issueDetail.assignees.filter(
+      (a) => !removeUserAccountId.includes(a.userAccountId)
+    );
+    issueDetail.assignees.push(
+      ...users.filter((u) => addUserAccountId.includes(u.userAccountId))
+    );
+
+    return res(ctx.status(200));
+  }),
+
+  rest.put("/api/issues/:issueId/labels", async (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json("API 수정되면 해줄게"));
+
+    // const { issueId } = req.params;
+    // const { addLabelsId, removeLabelsId } = await req.json();
+
+    // const issue = issueList.find((i) => i.issueNumber === Number(issueId));
+    // if (!issue) {
+    //   return res(
+    //     ctx.status(404),
+    //     ctx.json({
+    //       errorCode: "ISSUE_NOT_FOUND",
+    //       message: "존재하지 않는 이슈입니다.",
+    //     })
+    //   );
+    // }
+
+    // issueDetail.labels = issueDetail.labels.filter(
+    //   (l) => !removeLabelsId.includes(l.labelId)
+    // );
+    // issueDetail.labels.push(
+    //   ...labelList.filter((l) => addLabelsId.includes(l.labelId))
+    // );
+  }),
+
+  rest.put("/api/issues/:issueId/milestone", async (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json("API 수정되면 해줄게"));
+
+    // const { issueId } = req.params;
+    // const { milestoneId } = await req.json();
+
+    // const issue = issueList.find((i) => i.issueNumber === Number(issueId));
+    // if (!issue) {
+    //   return res(
+    //     ctx.status(404),
+    //     ctx.json({
+    //       errorCode: "ISSUE_NOT_FOUND",
+    //       message: "존재하지 않는 이슈입니다.",
+    //     })
+    //   );
+    // }
+
+    // issueDetail.milestone = milestoneList.find(
+    //   (m) => m.milestoneId === milestoneId
+    // );
+  }),
 ];
 
 // TODO: 만료된 토큰에 대한 응답 처리

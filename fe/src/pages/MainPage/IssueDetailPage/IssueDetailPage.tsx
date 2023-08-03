@@ -1,32 +1,25 @@
 import alertIcon from "@assets/icon/alertCircle.svg";
 import archiveIcon from "@assets/icon/archive.svg";
 import editIcon from "@assets/icon/edit.svg";
-import Comment from "@components/Comment";
 import Button from "@components/common/Button";
 import useFetch from "@hooks/useFetch";
 import { getIssue } from "api";
 import { useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
+import IssueDetailBody from "./IssueDetailBody";
 
 export default function IssueDetailPage() {
   const { issueId } = useParams();
+  const issueIdNumber = parseInt(issueId!);
 
-  const issueObj = useFetch(
+  const issueInfo = useFetch(
     {},
-    useCallback(() => getIssue(parseInt(issueId!)), [issueId])
+    useCallback(() => getIssue(issueIdNumber), [issueIdNumber])
   );
-  console.log(issueObj);
-  // const {
-  //   author,
-  //   content,
-  //   createdAt,
-  //   isOpen,
-  //   labels,
-  //   content,
-  //   assignees,
-  //   milestone,
-  // } = issueObj;
+
+  const { assignees, labels, milestone } = issueInfo;
+  const isIssueDetailFetched = !!Object.keys(issueInfo).length;
 
   return (
     <>
@@ -59,24 +52,11 @@ export default function IssueDetailPage() {
         </IssueInfo>
       </Header>
 
-      <Body>
-        <div className="comments-container">
-          <Comment
-            {...{
-              username: "Kakamotobi",
-              profileUrl: "url",
-              createdAt: "yesterday",
-              content: "blahblahblahblah",
-              isIssueAuthor: true,
-            }}
-          />
-
-          {/* TODO: comments.map() */}
-
-          {/* TODO: 새 코멘트 작성 text area */}
-        </div>
-        <div>sidebar</div>
-      </Body>
+      {isIssueDetailFetched && (
+        <IssueDetailBody
+          {...{ issueId: issueIdNumber, assignees, labels, milestone }}
+        />
+      )}
     </>
   );
 }
@@ -140,21 +120,5 @@ const IssueStateTag = styled.div`
   span {
     font: ${({ theme: { font } }) => font.displayMD12};
     color: ${({ theme: { brand } }) => brand.text.default};
-  }
-`;
-
-const Body = styled.div`
-  width: 100%;
-  padding-top: 24px;
-  display: flex;
-  gap: 32px;
-  border-top: ${({ theme: { border, neutral } }) =>
-    `${border.default} ${neutral.border.default}`};
-
-  .comments-container {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    flex-grow: 1;
   }
 `;

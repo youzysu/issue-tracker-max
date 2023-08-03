@@ -10,6 +10,9 @@ export default function Sidebar({
   onAssigneeChange,
   onLabelChange,
   onMilestoneChange,
+  onEditIssues,
+  onEditLabels,
+  onEditMilestone,
 }: {
   assignees: Set<number>;
   labels: Set<number>;
@@ -17,12 +20,15 @@ export default function Sidebar({
   onAssigneeChange: (assignees: Set<number>) => void;
   onLabelChange: (labels: Set<number>) => void;
   onMilestoneChange: (milestone: number) => void;
+  onEditIssues?: () => void;
+  onEditLabels?: () => void;
+  onEditMilestone?: () => void;
 }) {
   return (
     <StyledSidebar>
-      <AssigneeField {...{ assignees, onAssigneeChange }} />
-      <LabelField {...{ labels, onLabelChange }} />
-      <MilestoneField {...{ milestone, onMilestoneChange }} />
+      <AssigneeField {...{ assignees, onAssigneeChange, onEditIssues }} />
+      <LabelField {...{ labels, onLabelChange, onEditLabels }} />
+      <MilestoneField {...{ milestone, onMilestoneChange, onEditMilestone }} />
     </StyledSidebar>
   );
 }

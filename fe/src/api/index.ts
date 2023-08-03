@@ -4,6 +4,12 @@ import {
   fetcherFormDataWithBearer,
   fetcherWithBearer,
 } from "./fetcher";
+import {
+  EditAssigneesBody,
+  EditLabelsBody,
+  EditMilestoneBody,
+  NewIssueBody,
+} from "./type";
 
 export const postSignup = async (username: string, password: string) => {
   return await fetcher.post("/auth/signup", { username, password });
@@ -34,14 +40,6 @@ export const getUsers = async () => {
   return await fetcherWithBearer.get<User[]>("/users");
 };
 
-type NewIssueBody = {
-  title: string;
-  content: string;
-  assignees: number[];
-  labels: number[];
-  milestone: number;
-};
-
 export const postIssue = async (body: NewIssueBody) => {
   return await fetcherWithBearer.post<{ issueId: number }>("/issues", body);
 };
@@ -54,4 +52,12 @@ export const postImage = async (file: File) => {
     "/upload",
     formData
   );
+};
+
+export const putEditField = async (
+  issuesId: number,
+  field: "assignees" | "labels" | "milestone",
+  body: EditAssigneesBody | EditLabelsBody | EditMilestoneBody
+) => {
+  return await fetcherWithBearer.put(`/issues/${issuesId}/${field}`, body);
 };

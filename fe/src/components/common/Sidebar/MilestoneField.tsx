@@ -10,9 +10,11 @@ import { Container } from "./Container";
 export default function MilestoneField({
   milestone: milestoneId,
   onMilestoneChange,
+  onEditMilestone,
 }: {
   milestone: number;
   onMilestoneChange: (milestoneId: number) => void;
+  onEditMilestone?: () => void;
 }) {
   const milestonesList = useFetch<Milestone[]>([], getMilestones);
 
@@ -50,6 +52,7 @@ export default function MilestoneField({
           dropdownName="milestone"
           dropdownList={milestoneDropdownList}
           dropdownPanelPosition="right"
+          onEdit={onEditMilestone}
         />
       </RadioGroup>
       {!!milestoneId && generateMilestone()}
