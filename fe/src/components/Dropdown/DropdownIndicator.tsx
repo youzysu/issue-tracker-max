@@ -37,7 +37,7 @@ export default function DropdownIndicator({
       !(e.target as HTMLElement).closest(`#dropdown-indicator-${dropdownName}`)
     ) {
       setIsOpen(false);
-      outsideClickHandler && outsideClickHandler();
+      outsideClickHandler?.();
     }
   };
 
