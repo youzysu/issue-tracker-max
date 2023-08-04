@@ -29,7 +29,7 @@ export const handlers = [
       );
     }
 
-    return res(ctx.status(200));
+    return res(ctx.status(201));
   }),
 
   rest.post("/api/auth/login", async (req, res, ctx) => {
@@ -119,7 +119,7 @@ export const handlers = [
     );
   }),
 
-  rest.put("/api/issues/:issueId/assignees", async (req, res, ctx) => {
+  rest.post("/api/issues/:issueId/assignees", async (req, res, ctx) => {
     // const { issueId } = req.params;
     const { addUserAccountId, removeUserAccountId } = await req.json();
 
@@ -133,7 +133,7 @@ export const handlers = [
     return res(ctx.status(200));
   }),
 
-  rest.put("/api/issues/:issueId/labels", async (_, res, ctx) => {
+  rest.post("/api/issues/:issueId/labels", async (_, res, ctx) => {
     return res(ctx.status(200), ctx.json("API 수정되면 해줄게"));
 
     // const { issueId } = req.params;
@@ -158,7 +158,7 @@ export const handlers = [
     // );
   }),
 
-  rest.put("/api/issues/:issueId/milestone", async (_, res, ctx) => {
+  rest.post("/api/issues/:issueId/milestone", async (_, res, ctx) => {
     return res(ctx.status(200), ctx.json("API 수정되면 해줄게"));
 
     // const { issueId } = req.params;

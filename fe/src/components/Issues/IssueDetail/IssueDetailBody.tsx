@@ -1,6 +1,6 @@
 import Sidebar from "@components/common/Sidebar/Sidebar";
-import { compareSet } from "@utils/compareArray";
-import { putEditField } from "api";
+import { compareSet } from "@utils/compareSet";
+import { postEditField } from "api";
 import _ from "lodash";
 import { useRef, useState } from "react";
 import styled from "styled-components";
@@ -23,8 +23,8 @@ export default function IssueDetailBody({
     labels: Set<number>;
     milestone: number;
   }>({
-    assignees: new Set<number>(new Set<number>(assignees)),
-    labels: new Set<number>(new Set<number>(labels)),
+    assignees: new Set<number>(assignees),
+    labels: new Set<number>(labels),
     milestone: milestone,
   });
 
@@ -47,7 +47,7 @@ export default function IssueDetailBody({
       prevIssueDetail.current.assignees,
       issueDetail.assignees
     );
-    putEditField(issueNumber, "assignees", editedInfo);
+    postEditField(issueNumber, "assignees", editedInfo);
   };
 
   const onEditLabels = () => {
@@ -55,7 +55,7 @@ export default function IssueDetailBody({
       prevIssueDetail.current.labels,
       issueDetail.labels
     );
-    putEditField(issueNumber, "labels", editedInfo);
+    postEditField(issueNumber, "labels", editedInfo);
   };
 
   // TODO: 마일스톤 없는 이슈 DropdownItem 추가
@@ -67,7 +67,7 @@ export default function IssueDetailBody({
     const editedInfo = {
       milestoneId: isRemoved ? null : issueDetail.milestone,
     };
-    !isNotModified && putEditField(issueNumber, "milestone", editedInfo);
+    !isNotModified && postEditField(issueNumber, "milestone", editedInfo);
   };
 
   return (

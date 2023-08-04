@@ -1,4 +1,10 @@
-import { IssueDetail, IssueItem, Label, Milestone, User } from "@customTypes/index";
+import {
+  IssueDetail,
+  IssueItem,
+  Label,
+  Milestone,
+  User,
+} from "@customTypes/index";
 import {
   fetcher,
   fetcherFormDataWithBearer,
@@ -53,10 +59,10 @@ export const postImage = async (file: File) => {
   );
 };
 
-export const putEditField = async (
+export const postEditField = async (
   issuesId: number,
   field: "assignees" | "labels" | "milestone",
   body: EditAssigneesBody | EditLabelsBody | EditMilestoneBody
 ) => {
-  return await fetcherWithBearer.put(`/issues/${issuesId}/${field}`, body);
+  return await fetcherWithBearer.post(`/issues/${issuesId}/${field}`, body);
 };
