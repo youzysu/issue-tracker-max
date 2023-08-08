@@ -1,6 +1,6 @@
 import Comment from "@components/Comment";
 import Sidebar from "@components/common/Sidebar/Sidebar";
-import { IssueDetails, IssueSidebar } from "@customTypes/index";
+import { IssueComment, IssueDetails, IssueSidebar } from "@customTypes/index";
 import useFetch from "@hooks/useFetch";
 import { compareSet } from "@utils/compareSet";
 import { getIssueSidebar, postEditField } from "api";
@@ -10,9 +10,11 @@ import styled from "styled-components";
 export default function IssueDetailBody({
   issueNumber,
   issueDetails,
+  comments,
 }: {
   issueNumber: number;
   issueDetails: IssueDetails | null;
+  comments: IssueComment[];
 }) {
   const { data: issueSidebar, setData: updateIssueSidebar } =
     useFetch<IssueSidebar>(
@@ -38,18 +40,19 @@ export default function IssueDetailBody({
   const prevIssueSidebar = useRef(newIssueSidebar);
 
   useEffect(() => {
-    setNewIssueSidebar((prev) => ({
-      ...prev,
-      assignees: new Set<number>(issueSidebar?.assignees),
-      labels: new Set<number>(issueSidebar?.labels),
-      milestone: issueSidebar?.milestone || 0,
-    }));
+    if (issueSidebar) {
+      prevIssueSidebar.current = {
+        assignees: new Set<number>(issueSidebar.assignees),
+        labels: new Set<number>(issueSidebar.labels),
+        milestone: issueSidebar.milestone,
+      };
 
-    prevIssueSidebar.current = {
-      assignees: new Set<number>(issueSidebar?.assignees),
-      labels: new Set<number>(issueSidebar?.labels),
-      milestone: issueSidebar?.milestone || 0,
-    };
+      setNewIssueSidebar({
+        assignees: new Set<number>(issueSidebar.assignees),
+        labels: new Set<number>(issueSidebar.labels),
+        milestone: issueSidebar.milestone,
+      });
+    }
   }, [issueSidebar]);
 
   const updateIssueAssignee = (assignees: number[]) => {
@@ -140,11 +143,21 @@ export default function IssueDetailBody({
     }
   };
 
+  const commentList = comments.map((comment) => (
+    <Comment
+      key={comment.commentId}
+      author={{ username: comment.username, profileUrl: comment.profileUrl }}
+      createdAt={comment.createdAt}
+      content={comment.content}
+      isIssueAuthor={comment.username === author.username}
+    />
+  ));
+
   return (
     <Body>
       <div className="comments-container">
         <Comment {...{ author, createdAt, content, isIssueAuthor: true }} />
-        {/* TODO: comments.map() */}
+        {commentList}
         {/* TODO: 새 코멘트 작성 text area */}
       </div>
       <Sidebar
@@ -168,6 +181,7 @@ const Body = styled.div`
   width: 100%;
   padding-top: 24px;
   display: flex;
+  justify-content: center;
   gap: 32px;
   border-top: ${({ theme: { border, neutral } }) =>
     `${border.default} ${neutral.border.default}`};

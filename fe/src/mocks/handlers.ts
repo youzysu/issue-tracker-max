@@ -1,5 +1,7 @@
 import { rest } from "msw";
 import {
+  comment0,
+  comment1,
   issueDetails,
   issueList,
   issueSidebar,
@@ -128,6 +130,14 @@ export const handlers = [
   rest.post("/api/issues/:issueId/milestone", async (_, res, ctx) => {
     return res(ctx.status(200));
   }),
-];
 
-// TODO: 만료된 토큰에 대한 응답 처리
+  rest.get("/api/issues/:issueId/comments", async (req, res, ctx) => {
+    const cursor = req.url.searchParams.get("cursor");
+    if (cursor === "0") {
+      return res(ctx.status(200), ctx.json(comment0));
+    }
+    if (cursor === "1") {
+      return res(ctx.status(200), ctx.json(comment1));
+    }
+  }),
+];

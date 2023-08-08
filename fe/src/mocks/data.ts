@@ -1,3 +1,5 @@
+import { faker } from "@faker-js/faker";
+
 export const loginInfo: Record<string, string> = {
   zoeyzoey: "zoeyzoey",
 };
@@ -121,8 +123,8 @@ export const issueDetails = {
   isOpen: true,
   createdAt: "2023-07-31 11:33:03",
   author: {
-    username: "asdf",
-    profileUrl: "~~~",
+    username: faker.internet.userName(),
+    profileUrl: faker.image.avatar(),
   },
   content: `
   혹시 차이는 
@@ -192,3 +194,33 @@ export const milestoneList = [
     closedIssueCount: 10,
   },
 ];
+
+const commentIds = Array.from({ length: 20 }, (_, i) => i + 1);
+
+export const comment0 = {
+  data: Array.from({ length: 10 }, (_, i) => {
+    return {
+      commentId: commentIds[i],
+      username: faker.internet.userName(),
+      profileUrl: faker.image.avatar(),
+      content: faker.lorem.sentences(),
+      createdAt: faker.date.past().toISOString(),
+    };
+  }),
+  hasMore: true,
+  nextCursor: 1,
+};
+
+export const comment1 = {
+  data: Array.from({ length: 10 }, (_, i) => {
+    return {
+      commentId: commentIds[i + 10],
+      username: faker.internet.userName(),
+      profileUrl: faker.image.avatar(),
+      content: faker.lorem.sentences(),
+      createdAt: faker.date.past().toISOString(),
+    };
+  }),
+  hasMore: true,
+  nextCursor: 2, // 다음 요청은 ?cursor=6
+};

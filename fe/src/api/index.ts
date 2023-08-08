@@ -89,3 +89,9 @@ export const postEditField = async (
 ) => {
   return await fetcherWithBearer.post(`/issues/${issuesId}/${field}`, body);
 };
+
+export const getComments = async (issueId: number, cursor: number) => {
+  return await fetcherWithBearer.get(
+    `/issues/${issueId}/comments?cursor=${cursor}`
+  );
+};
