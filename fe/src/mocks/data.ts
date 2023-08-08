@@ -124,7 +124,13 @@ export const issueDetails = {
     username: "asdf",
     profileUrl: "~~~",
   },
-  content: "~~~~",
+  content: `
+  혹시 차이는 
+  
+  ![autism](https://github.com/issue-tracker-08/issue-tracker-max/assets/111998760/0072a597-4dd1-452d-b881-15ba0b50d47d) 
+  
+  뭐야 이거 왜 지금은 돼
+  `,
 };
 
 export const issueSidebar = {

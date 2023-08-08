@@ -1,5 +1,6 @@
+import Comment from "@components/Comment";
 import Sidebar from "@components/common/Sidebar/Sidebar";
-import { IssueSidebar } from "@customTypes/index";
+import { IssueDetails, IssueSidebar } from "@customTypes/index";
 import useFetch from "@hooks/useFetch";
 import { compareSet } from "@utils/compareSet";
 import { getIssueSidebar, postEditField } from "api";
@@ -8,15 +9,23 @@ import styled from "styled-components";
 
 export default function IssueDetailBody({
   issueNumber,
+  issueDetails,
 }: {
   issueNumber: number;
+  issueDetails: IssueDetails | null;
 }) {
   const { data: issueSidebar, setData: updateIssueSidebar } =
     useFetch<IssueSidebar>(
       useCallback(() => getIssueSidebar(issueNumber), [issueNumber])
     );
 
-  const [issueDetail, setIssueDetail] = useState<{
+  const { author, createdAt, content } = issueDetails || {
+    author: { username: "", profileUrl: "" },
+    createdAt: new Date().toISOString(),
+    content: "",
+  };
+
+  const [newIssueSidebar, setNewIssueSidebar] = useState<{
     assignees: Set<number>;
     labels: Set<number>;
     milestone: number;
@@ -26,10 +35,10 @@ export default function IssueDetailBody({
     milestone: issueSidebar?.milestone || 0,
   });
 
-  const prevIssueSidebar = useRef(issueDetail);
+  const prevIssueSidebar = useRef(newIssueSidebar);
 
   useEffect(() => {
-    setIssueDetail((prev) => ({
+    setNewIssueSidebar((prev) => ({
       ...prev,
       assignees: new Set<number>(issueSidebar?.assignees),
       labels: new Set<number>(issueSidebar?.labels),
@@ -62,22 +71,22 @@ export default function IssueDetailBody({
   };
 
   const onAssigneeChange = (assignees: Set<number>) => {
-    setIssueDetail((prev) => ({ ...prev, assignees }));
+    setNewIssueSidebar((prev) => ({ ...prev, assignees }));
   };
 
   const onLabelChange = (labels: Set<number>) => {
-    setIssueDetail((prev) => ({ ...prev, labels }));
+    setNewIssueSidebar((prev) => ({ ...prev, labels }));
   };
 
   const onMilestoneChange = (milestone: number) => {
-    setIssueDetail((prev) => ({ ...prev, milestone }));
+    setNewIssueSidebar((prev) => ({ ...prev, milestone }));
   };
 
   const onEditIssue = async () => {
     try {
       const { addedElements, removedElements } = compareSet(
         prevIssueSidebar.current.assignees,
-        issueDetail.assignees
+        newIssueSidebar.assignees
       );
 
       const { statusText } = await postEditField(issueNumber, "assignees", {
@@ -85,7 +94,8 @@ export default function IssueDetailBody({
         removeUserAccountId: removedElements,
       });
 
-      statusText === "OK" && updateIssueAssignee([...issueDetail.assignees]);
+      statusText === "OK" &&
+        updateIssueAssignee([...newIssueSidebar.assignees]);
     } catch (e) {
       // TODO: error handling
       console.log(e);
@@ -96,7 +106,7 @@ export default function IssueDetailBody({
     try {
       const { addedElements, removedElements } = compareSet(
         prevIssueSidebar.current.labels,
-        issueDetail.labels
+        newIssueSidebar.labels
       );
 
       const { statusText } = await postEditField(issueNumber, "labels", {
@@ -104,7 +114,7 @@ export default function IssueDetailBody({
         removeLabelsId: removedElements,
       });
 
-      statusText === "OK" && updateIssueLabels([...issueDetail.labels]);
+      statusText === "OK" && updateIssueLabels([...newIssueSidebar.labels]);
     } catch (e) {
       // TODO: error handling
       console.log(e);
@@ -115,15 +125,15 @@ export default function IssueDetailBody({
   const onEditMilestone = async () => {
     try {
       const isNotModified =
-        prevIssueSidebar.current.milestone === issueDetail.milestone;
+        prevIssueSidebar.current.milestone === newIssueSidebar.milestone;
 
       if (isNotModified) return;
 
       const { statusText } = await postEditField(issueNumber, "milestone", {
-        milestoneId: issueDetail.milestone,
+        milestoneId: newIssueSidebar.milestone,
       });
 
-      statusText === "OK" && updateIssueMilestone(issueDetail.milestone);
+      statusText === "OK" && updateIssueMilestone(newIssueSidebar.milestone);
     } catch (e) {
       // TODO: error handling
       console.log(e);
@@ -133,15 +143,15 @@ export default function IssueDetailBody({
   return (
     <Body>
       <div className="comments-container">
-        {/* TODO: 이슈 Content Comment */}
+        <Comment {...{ author, createdAt, content, isIssueAuthor: true }} />
         {/* TODO: comments.map() */}
         {/* TODO: 새 코멘트 작성 text area */}
       </div>
       <Sidebar
         {...{
-          assignees: issueDetail.assignees,
-          labels: issueDetail.labels,
-          milestone: issueDetail.milestone,
+          assignees: newIssueSidebar.assignees,
+          labels: newIssueSidebar.labels,
+          milestone: newIssueSidebar.milestone,
           onAssigneeChange,
           onLabelChange,
           onMilestoneChange,

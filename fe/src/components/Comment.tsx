@@ -1,18 +1,21 @@
 import editIcon from "@assets/icon/edit.svg";
 import smileIcon from "@assets/icon/smile.svg";
+import { convertPastTimestamp } from "@utils/time";
+import ReactMarkdown from "react-markdown";
 import { styled } from "styled-components";
 import { Avatar } from "./common/Avatar";
 import Button from "./common/Button";
 
 export default function Comment({
-  username,
-  profileUrl,
+  author,
   createdAt,
   content,
   isIssueAuthor,
 }: {
-  username: string;
-  profileUrl: string;
+  author: {
+    username: string;
+    profileUrl: string;
+  };
   createdAt: string;
   content: string;
   isIssueAuthor: boolean;
@@ -21,27 +24,34 @@ export default function Comment({
     <StyledComment>
       <Header>
         <div className="left-wrapper">
-          <Avatar src={profileUrl} alt={`${username}-avatar`} $size="M" />
-          <span className="comment-author">{username}</span>
-          <span className="comment-date">{createdAt}</span>
+          <Avatar
+            src={author.profileUrl}
+            alt={`${author.username}-avatar`}
+            $size="M"
+          />
+          <span className="comment-author">{author.username}</span>
+          <span className="comment-date">
+            {createdAt && convertPastTimestamp(createdAt)}
+          </span>
         </div>
 
         <div className="right-wrapper">
           {isIssueAuthor && <AuthorTag>작성자</AuthorTag>}
 
           <Button variant="ghost" size="S">
-            <img src={editIcon} alt="코멘트 편집" />
-            <span>편집</span>
+            <img className="button-icon" src={editIcon} alt="코멘트 편집" />
+            <span className="button-text">편집</span>
           </Button>
 
           <Button variant="ghost" size="S">
-            <img src={smileIcon} alt="코멘트 반응" />
-            <span>반응</span>
+            <img className="button-icon" src={smileIcon} alt="코멘트 반응" />
+            <span className="button-text">반응</span>
           </Button>
         </div>
       </Header>
-
-      <Body>{content}</Body>
+      <Body>
+        <ReactMarkdown children={content} />
+      </Body>
     </StyledComment>
   );
 }
@@ -81,6 +91,15 @@ const Header = styled.header`
   .right-wrapper {
     display: flex;
     gap: 16px;
+
+    .button-icon {
+      filter: ${({ theme: { filter } }) => filter.neutralTextDefault};
+    }
+
+    .button-text {
+      font: ${({ theme: { font } }) => font.displayMD12};
+      color: ${({ theme: { neutral } }) => neutral.text.default};
+    }
   }
 `;
 
