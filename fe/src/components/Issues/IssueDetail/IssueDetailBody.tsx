@@ -2,7 +2,7 @@ import plusIcon from "@assets/icon/plus.svg";
 import Comment from "@components/Comment";
 import Button from "@components/common/Button";
 import Sidebar from "@components/common/Sidebar/Sidebar";
-import TextArea from "@components/common/TextArea";
+import TextAreaContainer from "@components/common/TextArea/TextAreaContainer";
 import { IssueComment, IssueDetails, IssueSidebar } from "@customTypes/index";
 import useFetch from "@hooks/useFetch";
 import { compareSet } from "@utils/compareSet";
@@ -190,7 +190,7 @@ export default function IssueDetailBody({
       <div className="comments-container">
         <Comment {...{ author, createdAt, content, isIssueAuthor: true }} />
         {commentList}
-        <TextArea
+        <TextAreaContainer
           name="comment"
           placeholder="코멘트를 입력하세요"
           value={newComment}
