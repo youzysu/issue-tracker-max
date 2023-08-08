@@ -204,7 +204,7 @@ export const comment0 = {
       username: faker.internet.userName(),
       profileUrl: faker.image.avatar(),
       content: faker.lorem.sentences(),
-      createdAt: faker.date.past().toISOString(),
+      createdAt: faker.date.recent().toISOString(),
     };
   }),
   hasMore: true,
@@ -218,9 +218,9 @@ export const comment1 = {
       username: faker.internet.userName(),
       profileUrl: faker.image.avatar(),
       content: faker.lorem.sentences(),
-      createdAt: faker.date.past().toISOString(),
+      createdAt: faker.date.recent().toISOString(),
     };
   }),
   hasMore: true,
-  nextCursor: 2, // 다음 요청은 ?cursor=6
+  nextCursor: 2,
 };

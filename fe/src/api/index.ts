@@ -95,3 +95,10 @@ export const getComments = async (issueId: number, cursor: number) => {
     `/issues/${issueId}/comments?cursor=${cursor}`
   );
 };
+
+export const postComment = async (
+  issueId: number,
+  body: { content: string }
+) => {
+  return await fetcherWithBearer.post(`/issues/${issueId}/comments`, body);
+};

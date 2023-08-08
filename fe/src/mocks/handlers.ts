@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import { rest } from "msw";
 import {
   comment0,
@@ -139,5 +140,20 @@ export const handlers = [
     if (cursor === "1") {
       return res(ctx.status(200), ctx.json(comment1));
     }
+  }),
+
+  rest.post("/api/issues/:issueId/comments", async (req, res, ctx) => {
+    const { content } = await req.json<{ content: string }>();
+
+    return res(
+      ctx.status(201),
+      ctx.json({
+        commentId: 1000,
+        username: faker.internet.userName(),
+        profileUrl: faker.internet.avatar(),
+        content: content,
+        createdAt: new Date().toISOString(),
+      })
+    );
   }),
 ];

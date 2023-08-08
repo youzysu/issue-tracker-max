@@ -56,6 +56,10 @@ export default function IssueDetailPage() {
     });
   };
 
+  const onCommentAdd = (newComment: IssueComment) => {
+    setComments((prev) => [...prev, newComment]);
+  };
+
   return (
     <>
       <IssueDetailHeader
@@ -66,7 +70,9 @@ export default function IssueDetailPage() {
           numComments: 0,
         }}
       />
-      <IssueDetailBody {...{ issueNumber, issueDetails, comments }} />
+      <IssueDetailBody
+        {...{ issueNumber, issueDetails, comments, onCommentAdd }}
+      />
     </>
   );
 }

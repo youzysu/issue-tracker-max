@@ -1,9 +1,12 @@
+import plusIcon from "@assets/icon/plus.svg";
 import Comment from "@components/Comment";
+import Button from "@components/common/Button";
 import Sidebar from "@components/common/Sidebar/Sidebar";
+import TextArea from "@components/common/TextArea";
 import { IssueComment, IssueDetails, IssueSidebar } from "@customTypes/index";
 import useFetch from "@hooks/useFetch";
 import { compareSet } from "@utils/compareSet";
-import { getIssueSidebar, postEditField } from "api";
+import { getIssueSidebar, postComment, postEditField } from "api";
 import { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
@@ -11,10 +14,12 @@ export default function IssueDetailBody({
   issueNumber,
   issueDetails,
   comments,
+  onCommentAdd,
 }: {
   issueNumber: number;
   issueDetails: IssueDetails | null;
   comments: IssueComment[];
+  onCommentAdd: (newComment: IssueComment) => void;
 }) {
   const { data: issueSidebar, setData: updateIssueSidebar } =
     useFetch<IssueSidebar>(
@@ -36,6 +41,9 @@ export default function IssueDetailBody({
     labels: new Set<number>(issueSidebar?.labels),
     milestone: issueSidebar?.milestone || 0,
   });
+
+  const [newComment, setNewComment] = useState<string>("");
+  const isFilled = !!newComment;
 
   const prevIssueSidebar = useRef(newIssueSidebar);
 
@@ -83,6 +91,15 @@ export default function IssueDetailBody({
 
   const onMilestoneChange = (milestone: number) => {
     setNewIssueSidebar((prev) => ({ ...prev, milestone }));
+  };
+
+  const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const targetValue = e.target.value;
+    setNewComment(targetValue);
+  };
+
+  const appendContent = (content: string) => {
+    setNewComment((prev) => `${prev} ${content}`);
   };
 
   const onEditIssue = async () => {
@@ -143,6 +160,21 @@ export default function IssueDetailBody({
     }
   };
 
+  const onCommentSubmit = async () => {
+    try {
+      const { status, data } = await postComment(issueNumber, {
+        content: newComment,
+      });
+      if (status === 201) {
+        setNewComment("");
+        onCommentAdd(data);
+      }
+    } catch (error) {
+      // TODO: error handling
+      console.log(error);
+    }
+  };
+
   const commentList = comments.map((comment) => (
     <Comment
       key={comment.commentId}
@@ -158,7 +190,22 @@ export default function IssueDetailBody({
       <div className="comments-container">
         <Comment {...{ author, createdAt, content, isIssueAuthor: true }} />
         {commentList}
-        {/* TODO: 새 코멘트 작성 text area */}
+        <TextArea
+          name="comment"
+          placeholder="코멘트를 입력하세요"
+          value={newComment}
+          rows={5}
+          onChange={onContentChange}
+          appendContent={appendContent}
+        />
+        <Button
+          variant="container"
+          size="S"
+          disabled={!isFilled}
+          onClick={onCommentSubmit}>
+          <img src={plusIcon} alt="" />
+          <span>코멘트 작성</span>
+        </Button>
       </div>
       <Sidebar
         {...{
@@ -191,5 +238,7 @@ const Body = styled.div`
     flex-direction: column;
     gap: 24px;
     flex-grow: 1;
+
+    align-items: flex-end;
   }
 `;
