@@ -1,34 +1,65 @@
 import Sidebar from "@components/common/Sidebar/Sidebar";
+import { IssueSidebar } from "@customTypes/index";
+import useFetch from "@hooks/useFetch";
 import { compareSet } from "@utils/compareSet";
-import { postEditField } from "api";
-import _ from "lodash";
-import { useRef, useState } from "react";
+import { getIssueSidebar, postEditField } from "api";
+import { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-
-type IssueDetailBodyProps = {
-  issueNumber: number;
-  assignees: number[];
-  labels: number[];
-  milestone: number;
-};
 
 export default function IssueDetailBody({
   issueNumber,
-  assignees,
-  labels,
-  milestone,
-}: IssueDetailBodyProps) {
+}: {
+  issueNumber: number;
+}) {
+  const { data: issueSidebar, setData: updateIssueSidebar } =
+    useFetch<IssueSidebar>(
+      useCallback(() => getIssueSidebar(issueNumber), [issueNumber])
+    );
+
   const [issueDetail, setIssueDetail] = useState<{
     assignees: Set<number>;
     labels: Set<number>;
     milestone: number;
   }>({
-    assignees: new Set<number>(assignees),
-    labels: new Set<number>(labels),
-    milestone: milestone,
+    assignees: new Set<number>(issueSidebar?.assignees),
+    labels: new Set<number>(issueSidebar?.labels),
+    milestone: issueSidebar?.milestone || 0,
   });
 
-  const prevIssueDetail = useRef(_.cloneDeep(issueDetail));
+  const prevIssueSidebar = useRef(issueDetail);
+
+  useEffect(() => {
+    setIssueDetail((prev) => ({
+      ...prev,
+      assignees: new Set<number>(issueSidebar?.assignees),
+      labels: new Set<number>(issueSidebar?.labels),
+      milestone: issueSidebar?.milestone || 0,
+    }));
+
+    prevIssueSidebar.current = {
+      assignees: new Set<number>(issueSidebar?.assignees),
+      labels: new Set<number>(issueSidebar?.labels),
+      milestone: issueSidebar?.milestone || 0,
+    };
+  }, [issueSidebar]);
+
+  const updateIssueAssignee = (assignees: number[]) => {
+    updateIssueSidebar((prev) => {
+      return prev ? { ...prev, assignees } : prev;
+    });
+  };
+
+  const updateIssueLabels = (labels: number[]) => {
+    updateIssueSidebar((prev) => {
+      return prev ? { ...prev, labels } : prev;
+    });
+  };
+
+  const updateIssueMilestone = (milestone: number) => {
+    updateIssueSidebar((prev) => {
+      return prev ? { ...prev, milestone } : prev;
+    });
+  };
 
   const onAssigneeChange = (assignees: Set<number>) => {
     setIssueDetail((prev) => ({ ...prev, assignees }));
@@ -42,32 +73,61 @@ export default function IssueDetailBody({
     setIssueDetail((prev) => ({ ...prev, milestone }));
   };
 
-  const onEditIssue = () => {
-    const editedInfo = compareSet(
-      prevIssueDetail.current.assignees,
-      issueDetail.assignees
-    );
-    postEditField(issueNumber, "assignees", editedInfo);
+  const onEditIssue = async () => {
+    try {
+      const { addedElements, removedElements } = compareSet(
+        prevIssueSidebar.current.assignees,
+        issueDetail.assignees
+      );
+
+      const { statusText } = await postEditField(issueNumber, "assignees", {
+        addUserAccountId: addedElements,
+        removeUserAccountId: removedElements,
+      });
+
+      statusText === "OK" && updateIssueAssignee([...issueDetail.assignees]);
+    } catch (e) {
+      // TODO: error handling
+      console.log(e);
+    }
   };
 
-  const onEditLabels = () => {
-    const editedInfo = compareSet(
-      prevIssueDetail.current.labels,
-      issueDetail.labels
-    );
-    postEditField(issueNumber, "labels", editedInfo);
+  const onEditLabels = async () => {
+    try {
+      const { addedElements, removedElements } = compareSet(
+        prevIssueSidebar.current.labels,
+        issueDetail.labels
+      );
+
+      const { statusText } = await postEditField(issueNumber, "labels", {
+        addLabelsId: addedElements,
+        removeLabelsId: removedElements,
+      });
+
+      statusText === "OK" && updateIssueLabels([...issueDetail.labels]);
+    } catch (e) {
+      // TODO: error handling
+      console.log(e);
+    }
   };
 
   // TODO: 마일스톤 없는 이슈 DropdownItem 추가
-  const onEditMilestone = () => {
-    const isNotModified =
-      prevIssueDetail.current.milestone === issueDetail.milestone;
-    const isRemoved = issueDetail.milestone === 0;
+  const onEditMilestone = async () => {
+    try {
+      const isNotModified =
+        prevIssueSidebar.current.milestone === issueDetail.milestone;
 
-    const editedInfo = {
-      milestoneId: isRemoved ? null : issueDetail.milestone,
-    };
-    !isNotModified && postEditField(issueNumber, "milestone", editedInfo);
+      if (isNotModified) return;
+
+      const { statusText } = await postEditField(issueNumber, "milestone", {
+        milestoneId: issueDetail.milestone,
+      });
+
+      statusText === "OK" && updateIssueMilestone(issueDetail.milestone);
+    } catch (e) {
+      // TODO: error handling
+      console.log(e);
+    }
   };
 
   return (
