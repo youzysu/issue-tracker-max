@@ -4,7 +4,7 @@ import { postImage } from "api";
 import { debounce } from "lodash";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Label } from "./Label";
+import { Label } from "./Label.style";
 
 export default function TextArea({
   name,
@@ -31,10 +31,10 @@ export default function TextArea({
     return () => debouncedHandleCharCountShown.cancel();
   }, [value]);
 
-  const CHAR_SHOW_TIME = 2000;
   const charCountMessage = value && `띄어쓰기 포함 ${value.length}자`;
 
   const handleCharCountShown = () => {
+    const CHAR_SHOW_TIME = 2000;
     setIsCharCountShown(true);
 
     setTimeout(() => {
@@ -90,6 +90,7 @@ export default function TextArea({
 
 const TextAreaContainer = styled.div`
   display: flex;
+  width: 100%;
   flex-direction: column;
   justify-content: "center";
   color: ${({ theme: { neutral } }) => neutral.text.weak};
