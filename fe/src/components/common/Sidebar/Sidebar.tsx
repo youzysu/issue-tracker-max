@@ -34,7 +34,8 @@ export default function Sidebar({
 }
 
 const StyledSidebar = styled.div`
-  width: 288px;
+  min-width: 288px;
+  max-height: 442px;
   border: ${({ theme: { border, neutral } }) =>
     `${border.default} ${neutral.border.default}`};
   border-radius: ${({ theme: { radius } }) => radius.l};
