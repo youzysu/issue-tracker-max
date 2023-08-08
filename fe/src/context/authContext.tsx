@@ -7,13 +7,15 @@ type UserInfo = {
 
 type LoginResponse = {
   accessToken: string;
+  expirationTime: number;
   userInfo: UserInfo;
 };
 
 type AuthContextType = {
   isLoggedIn: boolean;
   userInfo: UserInfo;
-  onLogin: ({ accessToken, userInfo }: LoginResponse) => void;
+  onLogin: ({ accessToken, userInfo, expirationTime }: LoginResponse) => void;
+  onLogout: () => void;
 };
 
 const authContext = createContext<AuthContextType | null>(null);
@@ -25,14 +27,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     profileUrl: "",
   });
 
-  const onLogin = ({ accessToken, userInfo }: LoginResponse) => {
+  const onLogin = ({
+    accessToken,
+    expirationTime,
+    userInfo,
+  }: LoginResponse) => {
     localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("expirationTime", expirationTime.toString());
+
     setUserInfo(userInfo);
     setIsLoggedIn(true);
   };
 
+  // TODO: 이후 로그아웃 버튼에 추가 필요
+  const onLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("expirationTime");
+
+    setUserInfo({ username: "", profileUrl: "" });
+    setIsLoggedIn(false);
+  };
+
   return (
-    <authContext.Provider value={{ isLoggedIn, userInfo, onLogin }}>
+    <authContext.Provider value={{ isLoggedIn, userInfo, onLogin, onLogout }}>
       {children}
     </authContext.Provider>
   );

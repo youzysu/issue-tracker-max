@@ -1,10 +1,12 @@
 import XIcon from "@assets/icon/xSquare.svg";
 import { Avatar } from "@components/common/Avatar";
 import Button from "@components/common/Button";
+import { ErrorText } from "@components/common/ErrorText.style";
 import Sidebar from "@components/common/Sidebar/Sidebar";
 import TextArea from "@components/common/TextArea";
 import TextInput from "@components/common/TextInput";
 import { postIssue } from "api";
+import { AxiosError } from "axios";
 import { useAuth } from "context/authContext";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -18,13 +20,15 @@ export default function NewIssuePage() {
     labels: new Set<number>(),
     milestone: 0,
   });
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const { userInfo } = useAuth();
+  const { userInfo, onLogout } = useAuth();
 
   const navigate = useNavigate();
   const moveMainPage = () => navigate("/");
-  const moveIssueDetailPage = (issueId: number) =>
+  const moveIssueDetailPage = (issueId: number) => {
     navigate(`/issues/${issueId}`);
+  };
 
   const isFilled = !!newIssueInfo.title;
 
@@ -58,17 +62,32 @@ export default function NewIssuePage() {
   };
 
   const onIssueSubmit = async () => {
-    const {
-      data: { issueId },
-    } = await postIssue({
-      title: newIssueInfo.title,
-      content: newIssueInfo.content,
-      assignees: [...newIssueInfo.assignees],
-      labels: [...newIssueInfo.labels],
-      milestone: newIssueInfo.milestone,
-    });
-    if (issueId) {
-      moveIssueDetailPage(issueId);
+    try {
+      // TODO: 요청 시 토큰 유효성 검사 로직 분리 필요
+      const expirationTime = localStorage.getItem("expirationTime");
+      const isValidToken = expirationTime && Date.now() < +expirationTime;
+      !isValidToken && onLogout();
+
+      const {
+        data: { issueId },
+      } = await postIssue({
+        title: newIssueInfo.title,
+        content: newIssueInfo.content,
+        assignees: [...newIssueInfo.assignees],
+        labels: [...newIssueInfo.labels],
+        milestone: newIssueInfo.milestone,
+      });
+
+      issueId && moveIssueDetailPage(issueId);
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        const { message } = error.response.data;
+        setErrorMessage(message);
+        return;
+      }
+      setErrorMessage(
+        "새로운 이슈 등록에 실패했어요. 잠시 후 다시 시도해주세요!"
+      );
     }
   };
 
@@ -115,17 +134,20 @@ export default function NewIssuePage() {
       </div>
 
       <footer className="footer">
-        <Button variant="ghost" size="M" onClick={moveMainPage}>
-          <img src={XIcon} alt="" />
-          <span>작성 취소</span>
-        </Button>
-        <Button
-          variant="container"
-          size="L"
-          onClick={onIssueSubmit}
-          disabled={!isFilled}>
-          완료
-        </Button>
+        {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
+        <div className="button-wrapper">
+          <Button variant="ghost" size="M" onClick={moveMainPage}>
+            <img src={XIcon} alt="" />
+            <span>작성 취소</span>
+          </Button>
+          <Button
+            variant="container"
+            size="L"
+            onClick={onIssueSubmit}
+            disabled={!isFilled}>
+            완료
+          </Button>
+        </div>
       </footer>
     </StyledNewIssuePage>
   );
@@ -157,8 +179,14 @@ const StyledNewIssuePage = styled.div`
 
   .footer {
     display: flex;
-    justify-content: flex-end;
-    gap: 32px;
+    flex-direction: column;
+    gap: 8px;
+
+    .button-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      gap: 32px;
+    }
   }
 `;
 

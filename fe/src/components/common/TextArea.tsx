@@ -1,9 +1,11 @@
 import GripIcon from "@assets/icon/grip.svg";
 import paperClipIcon from "@assets/icon/paperclip.svg";
 import { postImage } from "api";
+import { AxiosError } from "axios";
 import { debounce } from "lodash";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { ErrorText } from "./ErrorText.style";
 import { Label } from "./Label";
 
 export default function TextArea({
@@ -16,6 +18,7 @@ export default function TextArea({
   appendContent: (content: string) => void;
 } & React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   const [isCharCountShown, setIsCharCountShown] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
     const DEBOUNCE_TIME = 500;
@@ -31,10 +34,10 @@ export default function TextArea({
     return () => debouncedHandleCharCountShown.cancel();
   }, [value]);
 
-  const CHAR_SHOW_TIME = 2000;
   const charCountMessage = value && `띄어쓰기 포함 ${value.length}자`;
 
   const handleCharCountShown = () => {
+    const CHAR_SHOW_TIME = 2000;
     setIsCharCountShown(true);
 
     setTimeout(() => {
@@ -43,17 +46,25 @@ export default function TextArea({
   };
 
   const onFileInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files) return;
+    try {
+      if (!e.target.files) return;
+      const file = e.target.files[0];
+      const filename = file.name;
 
-    const file = files[0];
-    const filename = file.name;
+      const {
+        data: { fileUrl },
+      } = await postImage(file);
 
-    const {
-      data: { fileUrl },
-    } = await postImage(file);
-    if (fileUrl) {
-      appendContent(`![${filename}](${fileUrl})`);
+      if (fileUrl) {
+        appendContent(`![${filename}](${fileUrl})`);
+      }
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        const { message } = error.response.data;
+        setErrorMessage(message);
+        return;
+      }
+      setErrorMessage("이미지 업로드에 실패했어요. 잠시 후 다시 시도해주세요!");
     }
   };
 
@@ -83,6 +94,7 @@ export default function TextArea({
             onChange={onFileInputChange}
           />
         </Label>
+        {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
       </FileUploadWrapper>
     </TextAreaContainer>
   );

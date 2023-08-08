@@ -64,7 +64,7 @@ export const handlers = [
         token: {
           tokenType: "bearer",
           accessToken: "q13t302hv2ht0",
-          expiresIn: 48000000,
+          expirationTime: 1691531693098,
         },
         user: {
           username: username,
