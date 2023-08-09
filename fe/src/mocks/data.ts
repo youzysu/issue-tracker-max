@@ -4,18 +4,13 @@ export const loginInfo: Record<string, string> = {
   zoeyzoey: "zoeyzoey",
 };
 
-export const users = [
-  {
-    userAccountId: 1,
-    username: "bruni",
-    profileUrl: "https://avatars.githubusercontent.com/u/79886384?v=4",
-  },
-  {
-    userAccountId: 2,
-    username: "bean",
-    profileUrl: "https://avatars.githubusercontent.com/u/79886384?v=4",
-  },
-];
+export const users = Array.from({ length: 50 }, (_, i) => {
+  return {
+    userAccountId: i + 1,
+    username: faker.internet.userName(),
+    profileUrl: faker.image.avatar(),
+  };
+});
 
 export const issueList = [
   {

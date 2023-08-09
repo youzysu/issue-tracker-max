@@ -86,6 +86,9 @@ export default function IssueDetailBody({
         newIssueSidebar.assignees
       );
 
+      const isNotModified = !addedElements.length && !removedElements.length;
+      if (isNotModified) return;
+
       const { statusText } = await postEditField(issueNumber, "assignees", {
         addUserAccountId: addedElements,
         removeUserAccountId: removedElements,
@@ -105,6 +108,9 @@ export default function IssueDetailBody({
         prevIssueSidebar.current.labels,
         newIssueSidebar.labels
       );
+
+      const isNotModified = !addedElements.length && !removedElements.length;
+      if (isNotModified) return;
 
       const { statusText } = await postEditField(issueNumber, "labels", {
         addLabelsId: addedElements,
