@@ -1,36 +1,25 @@
-import plusIcon from "@assets/icon/plus.svg";
-import Comment from "@components/Comment";
-import Button from "@components/common/Button";
 import Sidebar from "@components/common/Sidebar/Sidebar";
-import TextAreaContainer from "@components/common/TextArea/TextAreaContainer";
-import { IssueComment, IssueDetails, IssueSidebar } from "@customTypes/index";
+import { IssueDetails, IssueSidebar } from "@customTypes/index";
 import useFetch from "@hooks/useFetch";
 import { compareSet } from "@utils/compareSet";
-import { getIssueSidebar, postComment, postEditField } from "api";
+import { getIssueSidebar, postEditField } from "api";
 import { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import IssueCommentContainer from "./IssueCommentContainer";
 
 export default function IssueDetailBody({
   issueNumber,
   issueDetails,
-  comments,
-  onCommentAdd,
+  updateIssueContent,
 }: {
   issueNumber: number;
   issueDetails: IssueDetails | null;
-  comments: IssueComment[];
-  onCommentAdd: (newComment: IssueComment) => void;
+  updateIssueContent: (newContent: string) => void;
 }) {
   const { data: issueSidebar, setData: updateIssueSidebar } =
     useFetch<IssueSidebar>(
       useCallback(() => getIssueSidebar(issueNumber), [issueNumber])
     );
-
-  const { author, createdAt, content } = issueDetails || {
-    author: { username: "", profileUrl: "" },
-    createdAt: new Date().toISOString(),
-    content: "",
-  };
 
   const [newIssueSidebar, setNewIssueSidebar] = useState<{
     assignees: Set<number>;
@@ -41,9 +30,6 @@ export default function IssueDetailBody({
     labels: new Set<number>(issueSidebar?.labels),
     milestone: issueSidebar?.milestone || 0,
   });
-
-  const [newComment, setNewComment] = useState<string>("");
-  const isFilled = !!newComment;
 
   const prevIssueSidebar = useRef(newIssueSidebar);
 
@@ -93,16 +79,7 @@ export default function IssueDetailBody({
     setNewIssueSidebar((prev) => ({ ...prev, milestone }));
   };
 
-  const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const targetValue = e.target.value;
-    setNewComment(targetValue);
-  };
-
-  const appendContent = (content: string) => {
-    setNewComment((prev) => `${prev} ${content}`);
-  };
-
-  const onEditIssue = async () => {
+  const onEditAssignees = async () => {
     try {
       const { addedElements, removedElements } = compareSet(
         prevIssueSidebar.current.assignees,
@@ -160,53 +137,11 @@ export default function IssueDetailBody({
     }
   };
 
-  const onCommentSubmit = async () => {
-    try {
-      const { status, data } = await postComment(issueNumber, {
-        content: newComment,
-      });
-      if (status === 201) {
-        setNewComment("");
-        onCommentAdd(data);
-      }
-    } catch (error) {
-      // TODO: error handling
-      console.log(error);
-    }
-  };
-
-  const commentList = comments.map((comment) => (
-    <Comment
-      key={comment.commentId}
-      author={{ username: comment.username, profileUrl: comment.profileUrl }}
-      createdAt={comment.createdAt}
-      content={comment.content}
-      isIssueAuthor={comment.username === author.username}
-    />
-  ));
-
   return (
     <Body>
-      <div className="comments-container">
-        <Comment {...{ author, createdAt, content, isIssueAuthor: true }} />
-        {commentList}
-        <TextAreaContainer
-          name="comment"
-          placeholder="코멘트를 입력하세요"
-          value={newComment}
-          rows={5}
-          onChange={onContentChange}
-          appendContent={appendContent}
-        />
-        <Button
-          variant="container"
-          size="S"
-          disabled={!isFilled}
-          onClick={onCommentSubmit}>
-          <img src={plusIcon} alt="" />
-          <span>코멘트 작성</span>
-        </Button>
-      </div>
+      <IssueCommentContainer
+        {...{ issueNumber, issueDetails, updateIssueContent }}
+      />
       <Sidebar
         {...{
           assignees: newIssueSidebar.assignees,
@@ -215,7 +150,7 @@ export default function IssueDetailBody({
           onAssigneeChange,
           onLabelChange,
           onMilestoneChange,
-          onEditIssue,
+          onEditAssignees,
           onEditLabels,
           onEditMilestone,
         }}
@@ -232,13 +167,4 @@ const Body = styled.div`
   gap: 32px;
   border-top: ${({ theme: { border, neutral } }) =>
     `${border.default} ${neutral.border.default}`};
-
-  .comments-container {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    flex-grow: 1;
-
-    align-items: flex-end;
-  }
 `;

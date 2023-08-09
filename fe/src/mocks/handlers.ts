@@ -113,10 +113,13 @@ export const handlers = [
     return res(ctx.status(200), ctx.json({ issueId: issueList.length + 1 }));
   }),
 
-  rest.post("/api/upload", async (_, res, ctx) => {
+  rest.post("/api/images/upload", async (_, res, ctx) => {
     return res(
       ctx.status(200),
-      ctx.json({ fileUrl: "https://i.imgur.com/1.jpg" })
+      ctx.json({
+        fileUrl:
+          "https://github.com/codesquad-members-2023/issue-tracker-max/assets/111998760/6689b9ad-c631-40d8-bda4-180f075abc19",
+      })
     );
   }),
 
@@ -155,5 +158,13 @@ export const handlers = [
         createdAt: new Date().toISOString(),
       })
     );
+  }),
+
+  rest.put("/api/issues/:issueId/comments/:commentId", async (_, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  rest.put("/api/issues/:issueId/content", async (_, res, ctx) => {
+    return res(ctx.status(200));
   }),
 ];
