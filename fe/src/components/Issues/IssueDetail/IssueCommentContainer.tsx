@@ -5,6 +5,7 @@ import TextAreaContainer from "@components/common/TextArea/TextAreaContainer";
 import { IssueComment, IssueDetails } from "@customTypes/index";
 import useFetch from "@hooks/useFetch";
 import { getComments, postComment } from "api";
+import { useAuth } from "context/authContext";
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -20,6 +21,7 @@ export default function IssueCommentContainer({
   const [cursor, setCursor] = useState<number>(0);
   const [allComments, setAllComments] = useState<IssueComment[]>([]); // TODO: comment 자료 구조 개선
   const [newComment, setNewComment] = useState<string>("");
+  const { userInfo } = useAuth();
 
   const { data: issueComments } = useFetch<{
     data: IssueComment[];
@@ -71,7 +73,7 @@ export default function IssueCommentContainer({
       });
       if (status === 201) {
         setNewComment("");
-        onCommentAdd(data);
+        onCommentAdd({ ...data, ...userInfo });
       }
     } catch (error) {
       // TODO: error handling

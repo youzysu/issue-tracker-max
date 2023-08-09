@@ -1,4 +1,3 @@
-import { faker } from "@faker-js/faker";
 import { rest } from "msw";
 import {
   comment0,
@@ -152,8 +151,6 @@ export const handlers = [
       ctx.status(201),
       ctx.json({
         commentId: 1000,
-        username: faker.internet.userName(),
-        profileUrl: faker.internet.avatar(),
         content: content,
         createdAt: new Date().toISOString(),
       })
