@@ -37,7 +37,7 @@ export default function IssueDetailPage() {
       const clientHeight = window.innerHeight;
 
       const isBottom = scrollHeight - scrollTop === clientHeight;
-      isBottom && issueComments && setCursor(issueComments.nextCursor);
+      isBottom && issueComments?.hasMore && setCursor(issueComments.nextCursor);
     };
 
     window.addEventListener("scroll", handleScroll);

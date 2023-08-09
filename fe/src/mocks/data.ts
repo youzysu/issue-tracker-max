@@ -221,6 +221,6 @@ export const comment1 = {
       createdAt: faker.date.recent().toISOString(),
     };
   }),
-  hasMore: true,
+  hasMore: false,
   nextCursor: 2,
 };
