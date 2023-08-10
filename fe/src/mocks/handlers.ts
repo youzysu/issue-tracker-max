@@ -3,6 +3,7 @@ import {
   closedMilestoneList,
   comment0,
   comment1,
+  comment2,
   issueDetails,
   issueList,
   issueSidebar,
@@ -151,6 +152,9 @@ export const handlers = [
     if (cursor === "1") {
       return res(ctx.status(200), ctx.json(comment1));
     }
+    if (cursor === "2") {
+      return res(ctx.status(200), ctx.json(comment2));
+    }
   }),
 
   rest.post("/api/issues/:issueId/comments", async (req, res, ctx) => {
@@ -172,5 +176,17 @@ export const handlers = [
 
   rest.put("/api/issues/:issueId/content", async (_, res, ctx) => {
     return res(ctx.status(200));
+  }),
+
+  rest.post("/api/labels", async (_, res, ctx) => {
+    return res(ctx.status(201));
+  }),
+
+  rest.patch("/api/labels/:labelId", async (_, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  rest.delete("/api/labels/:labelId", async (_, res, ctx) => {
+    return res(ctx.status(204));
   }),
 ];

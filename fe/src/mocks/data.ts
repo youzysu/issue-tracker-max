@@ -128,6 +128,7 @@ export const issueDetails = {
   
   뭐야 이거 왜 지금은 돼
   `,
+  commentCount: 15,
 };
 
 export const issueSidebar = {
@@ -142,36 +143,42 @@ export const labelList = [
     name: "bug",
     fontColor: "#FFF",
     backgroundColor: "#D73A4A",
+    description: "bug fix",
   },
   {
     labelId: 2,
     name: "docs",
     fontColor: "#FFF",
     backgroundColor: "#2675CA",
+    description: "documentation",
   },
   {
     labelId: 3,
     name: "feat",
     fontColor: "#000",
     backgroundColor: "#FACA02",
+    description: "new feature",
   },
   {
     labelId: 4,
     name: "style",
     fontColor: "#FFF",
     backgroundColor: "#0025E6",
+    description: "changes unrelated to source code",
   },
   {
     labelId: 5,
     name: "asdf",
     fontColor: "#FFF",
     backgroundColor: "#0025E6",
+    description: "",
   },
   {
     labelId: 6,
     name: "qerqer",
     fontColor: "#000",
     backgroundColor: "#FF3B30",
+    description: "",
   },
 ];
 
@@ -199,12 +206,10 @@ export const closedMilestoneList = Array.from({ length: 3 }, (_, i) => {
   };
 });
 
-const commentIds = Array.from({ length: 20 }, (_, i) => i + 1);
-
 export const comment0 = {
   data: Array.from({ length: 10 }, (_, i) => {
     return {
-      commentId: commentIds[i],
+      commentId: 300 + i,
       username: faker.internet.userName(),
       profileUrl: faker.image.avatar(),
       content: faker.lorem.sentences(),
@@ -218,7 +223,21 @@ export const comment0 = {
 export const comment1 = {
   data: Array.from({ length: 10 }, (_, i) => {
     return {
-      commentId: commentIds[i + 10],
+      commentId: 500 + i,
+      username: faker.internet.userName(),
+      profileUrl: faker.image.avatar(),
+      content: faker.lorem.sentences(),
+      createdAt: faker.date.recent().toISOString(),
+    };
+  }),
+  hasMore: true,
+  nextCursor: 2,
+};
+
+export const comment2 = {
+  data: Array.from({ length: 5 }, (_, i) => {
+    return {
+      commentId: 800 + i,
       username: faker.internet.userName(),
       profileUrl: faker.image.avatar(),
       content: faker.lorem.sentences(),
@@ -226,5 +245,4 @@ export const comment1 = {
     };
   }),
   hasMore: false,
-  nextCursor: 2,
 };

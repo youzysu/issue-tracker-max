@@ -57,6 +57,7 @@ export type IssueDetails = {
     profileUrl: string;
   };
   content: string;
+  commentCount: number;
 };
 
 export type IssueSidebar = {
