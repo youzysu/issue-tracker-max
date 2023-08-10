@@ -78,8 +78,8 @@ export const getLabels = async () => {
   return await fetcherWithBearer.get<Label[]>("/labels");
 };
 
-export const getMilestones = async () => {
-  return await fetcherWithBearer.get<Milestone[]>("/milestones");
+export const getMilestones = async (state: "open" | "closed" = "open") => {
+  return await fetcherWithBearer.get<Milestone[]>(`/milestones?state=${state}`);
 };
 
 export const getUsers = async () => {

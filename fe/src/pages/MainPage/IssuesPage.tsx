@@ -2,7 +2,9 @@ import labelIcon from "@assets/icon/label.svg";
 import milestoneIcon from "@assets/icon/milestone.svg";
 import plusIcon from "@assets/icon/plus.svg";
 import FilterBar from "@components/FilterBar";
-import { Table, TableBodyIssues, TableHeaderIssues } from "@components/Table";
+import TableBodyIssues from "@components/Table/IssueTable/IssueBody";
+import TableHeaderIssues from "@components/Table/IssueTable/IssueHeader";
+import { Table } from "@components/Table/Table.style";
 import Button from "@components/common/Button";
 import TabBar from "@components/common/TabBar";
 import useFetch from "@hooks/useFetch";
@@ -42,6 +44,7 @@ export default function IssuesPage() {
 
         <div className="right-wrapper">
           <TabBar
+            currentTabName=""
             left={tabBarLeftInfo}
             right={tabBarRightInfo}
             borderStyle="outline"

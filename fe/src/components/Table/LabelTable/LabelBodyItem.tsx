@@ -4,7 +4,7 @@ import LabelTag from "@components/LabelTag";
 import Button from "@components/common/Button";
 import { Label } from "@customTypes/index";
 import { styled } from "styled-components";
-import TableBodyItem from "./TableBodyItem";
+import { TableBodyItem } from "../Table.style";
 
 export default function TableBodyItemLabel({ label }: { label: Label }) {
   return (

@@ -1,6 +1,6 @@
 import { Label } from "@customTypes/index";
-import TableBody from "../TableBody/TableBody";
-import { EmptyTableBodyItem, TableBodyItemLabel } from "../TableBodyItem";
+import { EmptyTableBodyItem, TableBody } from "../Table.style";
+import TableBodyItemLabel from "./LabelBodyItem";
 
 export default function TableBodyLabels({
   labelsList,

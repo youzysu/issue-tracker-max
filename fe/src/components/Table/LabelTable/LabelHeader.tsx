@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import TableHeader from "./TableHeader";
+import { TableHeader } from "../Table.style";
 
 export default function TableHeaderLabels({
   numLabels,

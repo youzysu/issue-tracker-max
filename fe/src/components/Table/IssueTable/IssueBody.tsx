@@ -1,7 +1,6 @@
-import { TableBodyItemIssue } from "@components/Table/TableBodyItem/";
 import { IssueItem as IssueItemType } from "@customTypes/index";
-import EmptyTableBodyItem from "../TableBodyItem/EmptyTableBodyItem";
-import TableBody from "./TableBody";
+import { EmptyTableBodyItem, TableBody } from "../Table.style";
+import TableBodyItemIssue from "./IssueBodyItem";
 
 export default function TableBodyIssues({
   issuesList,
