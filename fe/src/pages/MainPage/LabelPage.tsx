@@ -2,8 +2,8 @@ import labelIcon from "@assets/icon/label.svg";
 import milestoneIcon from "@assets/icon/milestone.svg";
 import plusIcon from "@assets/icon/plus.svg";
 import LabelEditor from "@components/Label/LabelEditor";
-import TableBodyLabels from "@components/Table/LabelTable/LabelBody";
-import TableHeaderLabels from "@components/Table/LabelTable/LabelHeader";
+import LabelsTableBody from "@components/Table/LabelsTable/LabelsTableBody";
+import LabelsTableHeader from "@components/Table/LabelsTable/LabelsTableHeader";
 import { Table } from "@components/Table/Table.style";
 import Button from "@components/common/Button";
 import TabBar from "@components/common/TabBar";
@@ -68,8 +68,8 @@ export default function LabelPage() {
       )}
 
       <Table>
-        <TableHeaderLabels numLabels={labelsList ? labelsList.length : 0} />
-        <TableBodyLabels labelsList={labelsList} />
+        <LabelsTableHeader numLabels={labelsList ? labelsList.length : 0} />
+        <LabelsTableBody labelsList={labelsList} />
       </Table>
     </StyledLabelPage>
   );

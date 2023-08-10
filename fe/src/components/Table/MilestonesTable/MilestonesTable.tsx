@@ -1,12 +1,12 @@
 import { Milestone } from "@customTypes/index";
 import { useState } from "react";
 import { Table } from "../Table.style";
-import MilestoneBody from "./MilestoneBody";
-import MilestoneHeader from "./MilestoneHeader";
+import MilestonesTableBody from "./MilestonesTableBody";
+import MilestonesTableHeader from "./MilestonesTableHeader";
 
 type TabName = "열린 마일스톤" | "닫힌 마일스톤";
 
-export default function MilestoneTable({
+export default function MilestonesTable({
   openMilestone,
   closedMilestone,
 }: {
@@ -27,10 +27,10 @@ export default function MilestoneTable({
 
   return (
     <Table>
-      <MilestoneHeader
+      <MilestonesTableHeader
         {...{ currentTabName, handleTabClick, numOpen, numClosed }}
       />
-      <MilestoneBody milestoneList={currentList} />
+      <MilestonesTableBody milestoneList={currentList} />
     </Table>
   );
 }

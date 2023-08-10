@@ -1,7 +1,7 @@
 import labelIcon from "@assets/icon/label.svg";
 import milestoneIcon from "@assets/icon/milestone.svg";
 import plusIcon from "@assets/icon/plus.svg";
-import MilestoneTable from "@components/Table/MilestoneTable/MilestoneTable";
+import MilestonesTable from "@components/Table/MilestonesTable";
 import Button from "@components/common/Button";
 import TabBar from "@components/common/TabBar";
 import useFetch from "@hooks/useFetch";
@@ -61,7 +61,7 @@ export default function MilestonePage() {
       </LabelNav>
 
       {isAddNewMilestone && <div>add new milestone component</div>}
-      <MilestoneTable {...{ openMilestone, closedMilestone }} />
+      <MilestonesTable {...{ openMilestone, closedMilestone }} />
     </StyledLabelPage>
   );
 }

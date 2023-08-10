@@ -2,8 +2,8 @@ import labelIcon from "@assets/icon/label.svg";
 import milestoneIcon from "@assets/icon/milestone.svg";
 import plusIcon from "@assets/icon/plus.svg";
 import FilterBar from "@components/FilterBar";
-import TableBodyIssues from "@components/Table/IssueTable/IssueBody";
-import TableHeaderIssues from "@components/Table/IssueTable/IssueHeader";
+import IssuesTableBody from "@components/Table/IssuesTable/IssuesTableBody";
+import IssuesTableHeader from "@components/Table/IssuesTable/IssuesTableHeader";
 import { Table } from "@components/Table/Table.style";
 import Button from "@components/common/Button";
 import TabBar from "@components/common/TabBar";
@@ -57,8 +57,8 @@ export default function IssuesPage() {
       </IssuesNavBar>
 
       <Table>
-        <TableHeaderIssues {...{ numOpen, numClosed }} />
-        <TableBodyIssues issuesList={issuesList} />
+        <IssuesTableHeader {...{ numOpen, numClosed }} />
+        <IssuesTableBody issuesList={issuesList} />
       </Table>
     </>
   );

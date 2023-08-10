@@ -1,8 +1,8 @@
 import { Milestone } from "@customTypes/index";
 import { EmptyTableBodyItem, TableBody } from "../Table.style";
-import MilestoneItem from "./MilestoneItem";
+import MilestonesTableItem from "./MilestonesTableItem";
 
-export default function MilestoneBody({
+export default function MilestonesTableBody({
   milestoneList,
 }: {
   milestoneList: Milestone[] | null;
@@ -12,7 +12,10 @@ export default function MilestoneBody({
       {milestoneList ? (
         <ul>
           {milestoneList.map((milestone) => (
-            <MilestoneItem key={milestone.milestoneId} milestone={milestone} />
+            <MilestonesTableItem
+              key={milestone.milestoneId}
+              milestone={milestone}
+            />
           ))}
         </ul>
       ) : (

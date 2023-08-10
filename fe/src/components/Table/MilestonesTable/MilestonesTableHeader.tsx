@@ -3,7 +3,7 @@ import archiveIcon from "@assets/icon/archive.svg";
 import TabBar from "@components/common/TabBar";
 import { TableHeader } from "../Table.style";
 
-export default function MilestoneHeader({
+export default function MilestonesTableHeader({
   currentTabName,
   handleTabClick,
   numOpen,

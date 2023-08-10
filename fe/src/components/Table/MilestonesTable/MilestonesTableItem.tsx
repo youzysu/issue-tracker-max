@@ -4,7 +4,11 @@ import { Milestone } from "@customTypes/index";
 import styled from "styled-components";
 import { TableBodyItem } from "../Table.style";
 
-export default function MilestoneItem({ milestone }: { milestone: Milestone }) {
+export default function MilestonesTableItem({
+  milestone,
+}: {
+  milestone: Milestone;
+}) {
   const { milestoneName, dueDate, description } = milestone;
 
   return (

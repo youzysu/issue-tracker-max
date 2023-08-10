@@ -1,8 +1,8 @@
 import { IssueItem as IssueItemType } from "@customTypes/index";
 import { EmptyTableBodyItem, TableBody } from "../Table.style";
-import TableBodyItemIssue from "./IssueBodyItem";
+import IssuesTableItem from "./IssuesTableItem";
 
-export default function TableBodyIssues({
+export default function IssuesTableBody({
   issuesList,
 }: {
   issuesList: IssueItemType[] | null;
@@ -12,7 +12,7 @@ export default function TableBodyIssues({
       {issuesList ? (
         <ul>
           {issuesList.map((issue) => (
-            <TableBodyItemIssue key={issue.issueNumber} issue={issue} />
+            <IssuesTableItem key={issue.issueNumber} issue={issue} />
           ))}
         </ul>
       ) : (

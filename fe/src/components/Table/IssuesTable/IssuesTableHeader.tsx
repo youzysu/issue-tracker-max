@@ -6,7 +6,7 @@ import TabBar from "@components/common/TabBar";
 import { styled } from "styled-components";
 import { TableHeader } from "../Table.style";
 
-export default function TableHeaderIssues({
+export default function IssuesTableHeader({
   numOpen,
   numClosed,
 }: {
