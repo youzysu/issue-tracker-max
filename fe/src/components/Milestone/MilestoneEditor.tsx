@@ -8,8 +8,8 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-type MilestoneInfo = {
-  name: string;
+export type MilestoneInfo = {
+  milestoneName: string;
   dueDate?: string;
   description?: string;
 };
@@ -29,42 +29,51 @@ export default function MilestoneEditor({
 
   // TODO: dueDate useInput validate 개선 후 적용
   const [newMilestone, setNewMilestone] = useState({
-    newName: milestoneInfo?.name || "",
-    newDueDate: milestoneInfo?.dueDate || "",
-    newDescription: milestoneInfo?.description || "",
+    milestoneName: milestoneInfo?.milestoneName || "",
+    dueDate: milestoneInfo?.dueDate || "",
+    description: milestoneInfo?.description || "",
   });
 
-  const isValidDueDate = validateDate(newMilestone.newDueDate);
+  const isValidDueDate = validateDate(newMilestone.dueDate);
 
   const onNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewMilestone((prev) => {
-      return { ...prev, newName: e.target.value };
+      return { ...prev, milestoneName: e.target.value };
     });
   };
 
   const onDueDateChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewMilestone((prev) => {
-      return { ...prev, newDueDate: e.target.value };
+      return { ...prev, dueDate: e.target.value };
     });
   };
 
   const onDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewMilestone((prev) => {
-      return { ...prev, newDescription: e.target.value };
+      return { ...prev, description: e.target.value };
     });
   };
 
-  const isReadyToSubmit = newMilestone.newName !== (milestoneInfo?.name || "");
+  // TODO: 개선 필요
+  const isReadyToSubmit = {
+    add: !!newMilestone.milestoneName,
+    edit:
+      !!newMilestone.milestoneName &&
+      (newMilestone.milestoneName !== milestoneInfo?.milestoneName ||
+        newMilestone.dueDate !== milestoneInfo?.dueDate ||
+        newMilestone.description !== milestoneInfo?.description),
+  };
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    // TODO: 수정된 내용이 있는 영역만 보내기
     try {
-      const { newName, newDueDate, newDescription } = newMilestone;
+      const { milestoneName, dueDate, description } = newMilestone;
       const body = {
-        milestoneName: newName,
-        description: newDescription,
-        dueDate: newDueDate,
+        milestoneName,
+        description,
+        dueDate,
       };
 
       const res = milestoneId
@@ -91,24 +100,24 @@ export default function MilestoneEditor({
             <TextInput
               name="제목"
               variant="short"
-              value={newMilestone.newName}
+              value={newMilestone.milestoneName}
               placeholder="마일스톤의 이름을 입력하세요"
               onChange={onNameChange}
             />
             <TextInput
               name="완료일(선택)"
               variant="short"
-              value={newMilestone.newDueDate}
+              value={newMilestone.dueDate}
               placeholder="YYYY-MM-DD"
               onChange={onDueDateChange}
-              hasError={!!newMilestone.newDueDate && !isValidDueDate}
+              hasError={!!newMilestone.dueDate && !isValidDueDate}
               helpText='"YYYY-MM-DD" 형식만 가능해요.'
             />
           </div>
           <TextInput
             name="설명(선택)"
             variant="short"
-            value={newMilestone.newDescription}
+            value={newMilestone.description}
             placeholder="마일스톤에 대한 설명을 입력하세요"
             onChange={onDescriptionChange}
           />
@@ -126,7 +135,7 @@ export default function MilestoneEditor({
             type="submit"
             variant="container"
             size="S"
-            disabled={!isReadyToSubmit}>
+            disabled={!isReadyToSubmit[variant]}>
             <img src={plusIcon} alt="완료" />
             <span>완료</span>
           </Button>

@@ -186,8 +186,8 @@ export const openMilestoneList = Array.from({ length: 10 }, (_, i) => {
   return {
     milestoneId: i + 1,
     milestoneName: faker.lorem.words(),
-    openIssueCount: faker.number.int(),
-    closedIssueCount: faker.number.int(),
+    openIssueCount: faker.number.int({ min: 0, max: 10 }),
+    closedIssueCount: faker.number.int({ min: 0, max: 10 }),
     description: faker.lorem.sentence(),
     dueDate: faker.date.future().toISOString().slice(0, 10),
     isOpen: true,
@@ -198,8 +198,8 @@ export const closedMilestoneList = Array.from({ length: 3 }, (_, i) => {
   return {
     milestoneId: i + 10,
     milestoneName: faker.lorem.words(),
-    openIssueCount: faker.number.int(),
-    closedIssueCount: faker.number.int(),
+    openIssueCount: faker.number.int({ min: 0, max: 10 }),
+    closedIssueCount: faker.number.int({ min: 0, max: 10 }),
     description: faker.lorem.sentence(),
     dueDate: faker.date.future().toISOString().slice(0, 10),
     isOpen: false,

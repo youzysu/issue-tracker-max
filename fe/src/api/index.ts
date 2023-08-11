@@ -171,3 +171,7 @@ export const putMilestoneState = async (
     `/milestones/${milestoneId}?state=${state}`
   );
 };
+
+export const deleteMilestone = async (milestoneId: number) => {
+  return await fetcherWithBearer.delete(`/milestones/${milestoneId}`);
+};
