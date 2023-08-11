@@ -7,13 +7,13 @@ export default function MilestonesTableBody({
 }: {
   milestoneList: Milestone[] | null;
 }) {
-  const hasMilestone = milestoneList?.length !== 0;
+  const hasMilestone = milestoneList && milestoneList.length !== 0;
 
   return (
     <TableBody>
       {hasMilestone ? (
         <ul>
-          {milestoneList?.map((milestone) => (
+          {milestoneList.map((milestone) => (
             <MilestonesTableItem
               key={milestone.milestoneId}
               milestone={milestone}
