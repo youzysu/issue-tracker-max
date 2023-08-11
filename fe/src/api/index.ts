@@ -143,3 +143,31 @@ export const postComment = async (
 ) => {
   return await fetcherWithBearer.post(`/issues/${issueId}/comments`, body);
 };
+
+export const postMilestone = async (body: {
+  milestoneName: string;
+  dueDate: string;
+  description: string;
+}) => {
+  return await fetcherWithBearer.post("/milestones", body);
+};
+
+export const putMilestoneContent = async (
+  milestoneId: number,
+  body: {
+    milestoneName: string;
+    dueDate: string;
+    description: string;
+  }
+) => {
+  return await fetcherWithBearer.put(`/milestones/${milestoneId}`, body);
+};
+
+export const putMilestoneState = async (
+  milestoneId: number,
+  state: "open" | "close"
+) => {
+  return await fetcherWithBearer.put(
+    `/milestones/${milestoneId}?state=${state}`
+  );
+};
