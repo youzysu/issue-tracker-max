@@ -165,7 +165,7 @@ export const putMilestoneContent = async (
 
 export const putMilestoneState = async (
   milestoneId: number,
-  state: "open" | "close"
+  state: "open" | "closed"
 ) => {
   return await fetcherWithBearer.put(
     `/milestones/${milestoneId}?state=${state}`

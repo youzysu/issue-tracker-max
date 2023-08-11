@@ -28,6 +28,7 @@ export default function MilestonesTableItem({
   const openEditor = () => setIsEditing(true);
   const closeEditor = () => setIsEditing(false);
 
+  // TODO: 서버에서 받아온 string 타입을 Number 타입으로 언제 변환하고 타입을 어떻게 관리해야 할까?
   const {
     milestoneId,
     milestoneName,
@@ -53,7 +54,7 @@ export default function MilestonesTableItem({
 
   const onMilestoneClose = async () => {
     try {
-      const res = await putMilestoneState(milestoneId, "close");
+      const res = await putMilestoneState(milestoneId, "closed");
       if (res.status === 200) {
         navigate(0);
         return;
@@ -135,8 +136,8 @@ export default function MilestonesTableItem({
             <ProgressBar
               variant="percent"
               name={milestoneName}
-              openCount={openIssueCount}
-              closeCount={closedIssueCount}
+              openCount={Number(openIssueCount)}
+              closeCount={Number(closedIssueCount)}
             />
           </RightWrapper>
         </>

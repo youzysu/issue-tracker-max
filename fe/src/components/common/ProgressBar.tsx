@@ -6,7 +6,7 @@ export default function ProgressBar({
   openCount,
   closeCount,
 }: {
-  variant: "label" | "percent";
+  variant?: "label" | "percent";
   name: string;
   openCount: number;
   closeCount: number;
