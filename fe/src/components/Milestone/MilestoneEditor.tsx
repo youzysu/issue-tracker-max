@@ -136,7 +136,7 @@ export default function MilestoneEditor({
             size="S"
             disabled={!isReadyToSubmit[variant]}>
             <img src={plusIcon} alt="완료" />
-            <span>완료</span>
+            <span>{variant === "edit" ? "편집 완료" : "완료"}</span>
           </Button>
         </ButtonsWrapper>
       </EditForm>

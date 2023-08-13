@@ -138,8 +138,8 @@ export default function MilestonesTableItem({
             <ProgressBar
               variant="percent"
               name={milestoneName}
-              openCount={Number(openIssueCount)}
-              closeCount={Number(closedIssueCount)}
+              openCount={openIssueCount}
+              closeCount={closedIssueCount}
             />
           </RightWrapper>
         </>
