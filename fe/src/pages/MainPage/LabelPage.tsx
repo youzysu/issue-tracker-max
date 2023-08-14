@@ -16,8 +16,7 @@ import { styled } from "styled-components";
 export default function LabelPage() {
   const navigate = useNavigate();
 
-  const { data: labelsList, updateData: updateLabelsList } =
-    useFetch(getLabels);
+  const { data: labelsList, reFetch: updateLabelsList } = useFetch(getLabels);
   const { data: milestonesList } = useFetch(getMilestones);
   const [isLabelEditorOpen, setIsLabelEditorOpen] = useState(false);
 

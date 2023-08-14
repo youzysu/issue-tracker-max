@@ -15,9 +15,9 @@ export default function MilestonePage() {
   const navigate = useNavigate();
 
   const { data: labelsList } = useFetch(getLabels);
-  const { data: openMilestone, updateData: updateOpenMilestone } =
+  const { data: openMilestone, reFetch: updateOpenMilestone } =
     useFetch(getMilestones);
-  const { data: closedMilestone, updateData: updateCloseMilestone } = useFetch(
+  const { data: closedMilestone, reFetch: updateCloseMilestone } = useFetch(
     useCallback(() => getMilestones("closed"), [])
   );
 

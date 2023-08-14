@@ -10,7 +10,7 @@ export default function IssueDetailPage() {
   const { issueId } = useParams();
   const issueNumber = parseInt(issueId!);
 
-  const { data: issueDetails, updateData: updateIssueDetails } =
+  const { data: issueDetails, reFetch: updateIssueDetails } =
     useFetch<IssueDetails>(
       useCallback(() => getIssueDetails(issueNumber), [issueNumber])
     );

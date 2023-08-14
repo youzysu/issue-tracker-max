@@ -5,7 +5,7 @@ export default function useFetch<T>(fetchFn: () => Promise<AxiosResponse<T>>): {
   data: T | null;
   isLoading: boolean;
   errorMessage: string;
-  updateData: () => void;
+  reFetch: () => void;
 } {
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +34,7 @@ export default function useFetch<T>(fetchFn: () => Promise<AxiosResponse<T>>): {
     fetchData();
   }, [fetchData]);
 
-  const updateData = () => {
+  const reFetch = () => {
     fetchData();
   };
 
@@ -42,6 +42,6 @@ export default function useFetch<T>(fetchFn: () => Promise<AxiosResponse<T>>): {
     data,
     isLoading,
     errorMessage,
-    updateData,
+    reFetch,
   };
 }

@@ -16,7 +16,7 @@ export default function IssueDetailBody({
   issueDetails: IssueDetails;
   updateIssueDetails: () => void;
 }) {
-  const { data: issueSidebar, updateData: updateIssueSidebar } =
+  const { data: issueSidebar, reFetch: updateIssueSidebar } =
     useFetch<IssueSidebar>(
       useCallback(() => getIssueSidebar(issueNumber), [issueNumber])
     );
