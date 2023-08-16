@@ -1,15 +1,11 @@
 import { createContext } from "react";
 
-export type checkFn = (value: number) => boolean;
-export type toggleFn = ({
-  checked,
-  value,
-}: {
-  checked: boolean;
-  value: number;
-}) => void;
+type CheckboxContextType<T> = {
+  isChecked: (value: T) => boolean;
+  toggleCheck: ({ checked, value }: { checked: boolean; value: T }) => void;
+};
 
-export const CheckboxContext = createContext<{
-  isChecked: checkFn;
-  toggleCheck: toggleFn;
-} | null>(null);
+// TODO: any 개선
+export const CheckboxContext = createContext<CheckboxContextType<any> | null>(
+  null
+);
