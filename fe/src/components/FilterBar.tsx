@@ -1,44 +1,76 @@
 import searchIcon from "@assets/icon/search.svg";
+import {
+  useIssuesFilter,
+  useIssuesFilterDispatch,
+} from "context/IssuesFilterContext";
 import { styled } from "styled-components";
 import DropdownIndicator from "./Dropdown/DropdownIndicator";
 import { DropdownItemType } from "./Dropdown/types";
+import RadioGroup from "./common/Group/RadioGroup";
 
 export default function FilterBar() {
-  const filterOptions: DropdownItemType[] = [
-    { id: 0, variant: "plain", name: "issue", content: "열린 이슈" },
-    { id: 0, variant: "plain", name: "issue", content: "내가 작성한 이슈" },
-    { id: 0, variant: "plain", name: "issue", content: "나에게 할당된 이슈" },
-    {
-      id: 0,
-      variant: "plain",
-      name: "issue",
-      content: "내가 댓글을 남긴 이슈",
-    },
-    { id: 0, variant: "plain", name: "issue", content: "닫힌 이슈" },
-  ];
+  const issuesFilter = useIssuesFilter();
+  const issuesFilterDispatch = useIssuesFilterDispatch();
 
   return (
     <StyledFilterBar>
       <FilterButtonContainer className="filter-button-container">
-        <DropdownIndicator
-          displayName="필터"
-          dropdownPanelVariant="filter"
-          dropdownName="issue"
-          dropdownList={filterOptions}
-          dropdownPanelPosition="left"
-        />
+        {issuesFilter && issuesFilterDispatch && (
+          <RadioGroup
+            value={issuesFilter.state.filterBar}
+            onChange={(newFilterBarOption) => {
+              issuesFilterDispatch({
+                type: "SET_FILTER_BAR",
+                payload: newFilterBarOption,
+              });
+            }}>
+            <DropdownIndicator
+              displayName="필터"
+              dropdownPanelVariant="filter"
+              dropdownName="issue"
+              dropdownList={filterOptions}
+              dropdownPanelPosition="left"
+              valueType="name"
+            />
+          </RadioGroup>
+        )}
       </FilterButtonContainer>
 
       <FilterForm className="filter-form">
         <img src={searchIcon} alt="Search Filter" />
-        <FilterInput type="text" placeholder="Search all issues" />
+        {issuesFilter && (
+          <FilterInput
+            type="text"
+            placeholder="Search all issues"
+            value={`is:issue ${issuesFilter.text}`}
+            readOnly
+          />
+        )}
       </FilterForm>
     </StyledFilterBar>
   );
 }
 
+const filterOptions: DropdownItemType[] = [
+  { id: 0, variant: "plain", name: "open", content: "열린 이슈" },
+  { id: 1, variant: "plain", name: "writtenByMe", content: "내가 작성한 이슈" },
+  {
+    id: 2,
+    variant: "plain",
+    name: "assignedToMe",
+    content: "나에게 할당된 이슈",
+  },
+  {
+    id: 3,
+    variant: "plain",
+    name: "commentedByMe",
+    content: "내가 댓글을 남긴 이슈",
+  },
+  { id: 4, variant: "plain", name: "closed", content: "닫힌 이슈" },
+];
+
 const StyledFilterBar = styled.div`
-  width: 560px;
+  width: 100%;
   height: 40px;
   display: flex;
   border: ${({ theme: { border, neutral } }) =>

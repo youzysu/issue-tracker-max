@@ -19,3 +19,9 @@ export type EditLabelsBody = {
 export type EditMilestoneBody = {
   milestoneId: number;
 };
+
+export type Pagination = {
+  currentPage: number;
+  totalCounts: number;
+  totalPages: number;
+};
