@@ -1,73 +1,58 @@
-import alertIcon from "@assets/icon/alertCircle.svg";
-import archiveIcon from "@assets/icon/archive.svg";
 import Pagination from "@components/Pagination";
-import InputCheckbox from "@components/common/Input/InputCheckbox";
-import TabBar from "@components/common/TabBar";
 import useFetch from "@hooks/useFetch";
 import { getIssues } from "api";
-import {
-  useIssuesFilter,
-  useIssuesFilterDispatch,
-} from "context/IssuesFilterContext";
+import { useIssuesFilter } from "context/IssuesFilterContext";
 import { useCallback, useState } from "react";
 import { styled } from "styled-components";
-import {
-  EmptyTableBodyItem,
-  Table,
-  TableBody,
-  TableHeader,
-} from "../Table.style";
-import IssuesDropdownWrapper from "./IssuesDropdownWrapper";
-import IssuesTableItem from "./IssuesTableItem";
+import { Table } from "../Table.style";
+import IssuesTableBody from "./IssuesTableBody";
+import IssuesTableHeader from "./IssuesTableHeader";
 
 export default function IssuesTable() {
   const [pageIndex, setPageIndex] = useState(1);
+  const [selectedIssueIds, setSelectedIssueIds] = useState<Set<number>>(
+    new Set()
+  );
 
   const { issuesFilter } = useIssuesFilter();
-  const issuesFilterDispatch = useIssuesFilterDispatch();
-
-  const { data: issuesList } = useFetch(
+  const { data: issuesList, reFetch: refetchIssuesList } = useFetch(
     useCallback(
       () => getIssues(issuesFilter.text, pageIndex),
       [issuesFilter.text, pageIndex]
     )
   );
 
-  const issuesStatus = issuesFilter.state.status!;
-  const openIssuesList = issuesList?.data.filter((issue) => issue.isOpen) || [];
-  const closedIssuesList =
-    issuesList?.data.filter((issue) => !issue.isOpen) || [];
-  const currentIssuesList = {
-    open: openIssuesList,
-    closed: closedIssuesList,
-    all: issuesList?.data || [],
-  };
+  const isAllIssuesSelected =
+    selectedIssueIds.size === issuesList?.data.length &&
+    selectedIssueIds.size > 0;
 
-  const currentTabName = (issuesStatus: "open" | "closed") => {
-    switch (issuesStatus) {
-      case "open":
-        return "열린 이슈";
-      case "closed":
-        return "닫힌 이슈";
+  const toggleSelectAll = () => {
+    if (isAllIssuesSelected) {
+      deselectAllIssues();
+    } else {
+      selectAllIssues();
     }
   };
 
-  const tabBarLeftInfo = {
-    name: "열린 이슈",
-    count: issuesList?.pagination.openCounts,
-    iconSrc: alertIcon,
-    callback: () => {
-      issuesFilterDispatch({ type: "SET_FILTER_BAR", payload: "open" });
-    },
+  const selectAllIssues = () => {
+    const allIssueIds = issuesList?.data.map((issue) => issue.issueNumber);
+    setSelectedIssueIds(new Set(allIssueIds));
   };
 
-  const tabBarRightInfo = {
-    name: "닫힌 이슈",
-    count: issuesList?.pagination.closedCounts,
-    iconSrc: archiveIcon,
-    callback: () => {
-      issuesFilterDispatch({ type: "SET_FILTER_BAR", payload: "closed" });
-    },
+  const deselectAllIssues = () => {
+    setSelectedIssueIds(new Set<number>());
+  };
+
+  const toggleSelectIssue = (id: number) => {
+    setSelectedIssueIds((prev) => {
+      const newSet = new Set(prev);
+      if (prev.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
   };
 
   const onPageChange = (page: number) => {
@@ -85,33 +70,28 @@ export default function IssuesTable() {
   return (
     <TableWrapper>
       <Table>
-        <TableHeader>
-          <TableHeaderContents>
-            <div className="left-wrapper">
-              <InputCheckbox />
-              <TabBar
-                currentTabName={currentTabName(issuesStatus)}
-                left={tabBarLeftInfo}
-                right={tabBarRightInfo}
-                borderStyle="none"
-              />
-            </div>
-            <IssuesDropdownWrapper />
-          </TableHeaderContents>
-        </TableHeader>
-        <TableBody>
-          {currentIssuesList[issuesStatus].length ? (
-            <ul>
-              {currentIssuesList[issuesStatus].map((issue) => (
-                <IssuesTableItem key={issue.issueNumber} issue={issue} />
-              ))}
-            </ul>
-          ) : (
-            <EmptyTableBodyItem>
-              검색과 일치하는 결과가 없습니다.
-            </EmptyTableBodyItem>
-          )}
-        </TableBody>
+        {issuesList && (
+          <IssuesTableHeader
+            {...{
+              numOpen: issuesList.pagination.openCounts,
+              numClosed: issuesList.pagination.closedCounts,
+              selectedIssueIds,
+              isAllIssuesSelected,
+              toggleSelectAll,
+              refetchIssuesList,
+              deselectAllIssues,
+            }}
+          />
+        )}
+        {issuesList && (
+          <IssuesTableBody
+            {...{
+              issuesList: issuesList.data,
+              selectedIssueIds,
+              toggleSelectIssue,
+            }}
+          />
+        )}
       </Table>
       {issuesList && (
         <Pagination
@@ -130,24 +110,4 @@ const TableWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-`;
-
-const TableHeaderContents = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  .left-wrapper {
-    display: flex;
-    align-items: center;
-
-    > *:first-child {
-      margin-right: 32px;
-    }
-
-    > *:last-child {
-      gap: 24px;
-    }
-  }
 `;

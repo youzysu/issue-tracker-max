@@ -25,6 +25,7 @@ export default function DropdownPanel({
     const suffixKOR =
       dropdownName === "assignee" || dropdownName === "issue" ? "가" : "이";
 
+    // TODO: 중복 제거하기 DropdownItem 수정사항 발생 시 3번 수정해야함
     switch (variant) {
       case "filter":
         return (
@@ -70,7 +71,12 @@ export default function DropdownPanel({
               {dropdownList.map((item) => {
                 return (
                   <DropdownItem
-                    {...{ key: item.id, option: dropdownOption, item }}
+                    {...{
+                      key: item.id,
+                      option: dropdownOption,
+                      item,
+                      valueType,
+                    }}
                   />
                 );
               })}
@@ -87,7 +93,12 @@ export default function DropdownPanel({
               {dropdownList.map((item) => {
                 return (
                   <DropdownItem
-                    {...{ key: item.id, option: dropdownOption, item }}
+                    {...{
+                      key: item.id,
+                      option: dropdownOption,
+                      item,
+                      valueType,
+                    }}
                   />
                 );
               })}

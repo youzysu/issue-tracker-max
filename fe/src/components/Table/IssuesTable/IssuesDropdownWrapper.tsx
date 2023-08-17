@@ -45,74 +45,72 @@ export default function IssuesDropdownWrapper() {
     })) || [];
 
   return (
-    <>
-      <StyledDropdownWrapper>
-        <CheckboxGroup
-          values={issuesFilter.state.assignees}
-          onChange={(newAssignees) =>
-            issuesFilterDispatch({
-              type: "SET_ASSIGNEES",
-              payload: newAssignees,
-            })
-          }>
-          <DropdownIndicator
-            displayName="담당자"
-            dropdownPanelVariant="filter"
-            dropdownName="assignee"
-            dropdownList={userDropdownList}
-            dropdownOption="multiple"
-            dropdownPanelPosition="right"
-            valueType="content"
-          />
-        </CheckboxGroup>
-        <CheckboxGroup
-          values={issuesFilter.state.labels}
-          onChange={(newLabels) =>
-            issuesFilterDispatch({ type: "SET_LABELS", payload: newLabels })
-          }>
-          <DropdownIndicator
-            displayName="레이블"
-            dropdownPanelVariant="filter"
-            dropdownName="label"
-            dropdownList={labelDropdownList}
-            dropdownOption="multiple"
-            dropdownPanelPosition="right"
-            valueType="content"
-          />
-        </CheckboxGroup>
-        <RadioGroup
-          value={issuesFilter.state.milestone}
-          onChange={(newMilestone) => {
-            issuesFilterDispatch({
-              type: "SET_MILESTONE",
-              payload: newMilestone,
-            });
-          }}>
-          <DropdownIndicator
-            displayName="마일스톤"
-            dropdownPanelVariant="filter"
-            dropdownName="milestone"
-            dropdownList={milestoneDropdownList}
-            dropdownPanelPosition="right"
-            valueType="content"
-          />
-        </RadioGroup>
-        <RadioGroup
-          value={issuesFilter.state.author}
-          onChange={(newAuthor) =>
-            issuesFilterDispatch({ type: "SET_AUTHOR", payload: newAuthor })
-          }>
-          <DropdownIndicator
-            displayName="작성자"
-            dropdownPanelVariant="filter"
-            dropdownName="author"
-            dropdownList={userDropdownList}
-            dropdownPanelPosition="right"
-            valueType="content"
-          />
-        </RadioGroup>
-      </StyledDropdownWrapper>
-    </>
+    <StyledDropdownWrapper>
+      <CheckboxGroup
+        values={issuesFilter.state.assignees}
+        onChange={(newAssignees) =>
+          issuesFilterDispatch({
+            type: "SET_ASSIGNEES",
+            payload: newAssignees,
+          })
+        }>
+        <DropdownIndicator
+          displayName="담당자"
+          dropdownPanelVariant="filter"
+          dropdownName="assignee"
+          dropdownList={userDropdownList}
+          dropdownOption="multiple"
+          dropdownPanelPosition="right"
+          valueType="content"
+        />
+      </CheckboxGroup>
+      <CheckboxGroup
+        values={issuesFilter.state.labels}
+        onChange={(newLabels) =>
+          issuesFilterDispatch({ type: "SET_LABELS", payload: newLabels })
+        }>
+        <DropdownIndicator
+          displayName="레이블"
+          dropdownPanelVariant="filter"
+          dropdownName="label"
+          dropdownList={labelDropdownList}
+          dropdownOption="multiple"
+          dropdownPanelPosition="right"
+          valueType="content"
+        />
+      </CheckboxGroup>
+      <RadioGroup
+        value={issuesFilter.state.milestone}
+        onChange={(newMilestone) => {
+          issuesFilterDispatch({
+            type: "SET_MILESTONE",
+            payload: newMilestone,
+          });
+        }}>
+        <DropdownIndicator
+          displayName="마일스톤"
+          dropdownPanelVariant="filter"
+          dropdownName="milestone"
+          dropdownList={milestoneDropdownList}
+          dropdownPanelPosition="right"
+          valueType="content"
+        />
+      </RadioGroup>
+      <RadioGroup
+        value={issuesFilter.state.author}
+        onChange={(newAuthor) =>
+          issuesFilterDispatch({ type: "SET_AUTHOR", payload: newAuthor })
+        }>
+        <DropdownIndicator
+          displayName="작성자"
+          dropdownPanelVariant="filter"
+          dropdownName="author"
+          dropdownList={userDropdownList}
+          dropdownPanelPosition="right"
+          valueType="content"
+        />
+      </RadioGroup>
+    </StyledDropdownWrapper>
   );
 }
 
