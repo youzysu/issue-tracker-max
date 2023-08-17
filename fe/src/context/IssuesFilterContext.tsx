@@ -12,6 +12,7 @@ const IssuesFilterContext = createContext<{
   state: IssuesFilterState;
   text: string;
 } | null>(null);
+
 const IssuesFilterDispatchContext =
   createContext<Dispatch<IssuesFilterAction> | null>(null);
 
@@ -75,8 +76,6 @@ export const IssuesFilterProvider = ({ children }: { children: ReactNode }) => {
   );
   const filterText = generateFilterText(issuesFilterState);
 
-  console.log(issuesFilterState);
-
   return (
     <IssuesFilterContext.Provider
       value={{ state: issuesFilterState, text: filterText }}>
@@ -88,9 +87,21 @@ export const IssuesFilterProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export function useIssuesFilter() {
-  return useContext(IssuesFilterContext);
+  const context = useContext(IssuesFilterContext);
+
+  if (!context) {
+    throw new Error("Cannot find IssuesFilterProvider");
+  }
+
+  return context;
 }
 
 export function useIssuesFilterDispatch() {
-  return useContext(IssuesFilterDispatchContext);
+  const context = useContext(IssuesFilterDispatchContext);
+
+  if (!context) {
+    throw new Error("Cannot find IssuesFilterProvider");
+  }
+
+  return context;
 }

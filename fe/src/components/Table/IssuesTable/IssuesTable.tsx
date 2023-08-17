@@ -26,7 +26,7 @@ export default function IssuesTable() {
   const issuesFilter = useIssuesFilter();
   const issuesFilterDispatch = useIssuesFilterDispatch();
 
-  const filterQuery = `${issuesFilter?.text}`;
+  const filterQuery = `${issuesFilter.text}`;
   const { data: issuesList } = useFetch(
     useCallback(
       () => getIssues(filterQuery, pageIndex),
@@ -34,7 +34,7 @@ export default function IssuesTable() {
     )
   );
 
-  const IssuesStatus = issuesFilter?.state.status ?? "all";
+  const IssuesStatus = issuesFilter.state.status ?? "all";
   const openIssuesList = issuesList?.data.filter((issue) => issue.isOpen) || [];
   const closedIssuesList =
     issuesList?.data.filter((issue) => !issue.isOpen) || [];
@@ -51,7 +51,7 @@ export default function IssuesTable() {
     count: openIssuesList.length,
     iconSrc: alertIcon,
     callback: () => {
-      issuesFilterDispatch?.({ type: "SET_FILTER_BAR", payload: "open" });
+      issuesFilterDispatch({ type: "SET_FILTER_BAR", payload: "open" });
     },
   };
 
@@ -60,7 +60,7 @@ export default function IssuesTable() {
     count: closedIssuesList.length,
     iconSrc: archiveIcon,
     callback: () => {
-      issuesFilterDispatch?.({ type: "SET_FILTER_BAR", payload: "closed" });
+      issuesFilterDispatch({ type: "SET_FILTER_BAR", payload: "closed" });
     },
   };
 

@@ -15,25 +15,23 @@ export default function FilterBar() {
   return (
     <StyledFilterBar>
       <FilterButtonContainer className="filter-button-container">
-        {issuesFilter && issuesFilterDispatch && (
-          <RadioGroup
-            value={issuesFilter.state.filterBar}
-            onChange={(newFilterBarOption) => {
-              issuesFilterDispatch({
-                type: "SET_FILTER_BAR",
-                payload: newFilterBarOption,
-              });
-            }}>
-            <DropdownIndicator
-              displayName="필터"
-              dropdownPanelVariant="filter"
-              dropdownName="issue"
-              dropdownList={filterOptions}
-              dropdownPanelPosition="left"
-              valueType="name"
-            />
-          </RadioGroup>
-        )}
+        <RadioGroup
+          value={issuesFilter.state.filterBar}
+          onChange={(newFilterBarOption) => {
+            issuesFilterDispatch({
+              type: "SET_FILTER_BAR",
+              payload: newFilterBarOption,
+            });
+          }}>
+          <DropdownIndicator
+            displayName="필터"
+            dropdownPanelVariant="filter"
+            dropdownName="issue"
+            dropdownList={filterOptions}
+            dropdownPanelPosition="left"
+            valueType="name"
+          />
+        </RadioGroup>
       </FilterButtonContainer>
 
       <FilterForm className="filter-form">

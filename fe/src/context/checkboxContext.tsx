@@ -5,7 +5,7 @@ type CheckboxContextType<T> = {
   toggleCheck: ({ checked, value }: { checked: boolean; value: T }) => void;
 };
 
-// TODO: any 개선
+// 실제 사용 시에는 T를 제네릭으로 받아서 사용하면 됨
 export const CheckboxContext = createContext<CheckboxContextType<any> | null>(
   null
 );

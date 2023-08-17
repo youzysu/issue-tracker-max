@@ -13,7 +13,7 @@ export default function IssuesPage() {
   const issuesFilter = useIssuesFilter();
   const issuesFilterDispatch = useIssuesFilterDispatch();
 
-  const isIssuesFiltered = issuesFilter?.text !== "is:open";
+  const isIssuesFiltered = issuesFilter.text !== "is:open";
 
   return (
     <StyledIssuesPage>
@@ -27,7 +27,7 @@ export default function IssuesPage() {
           size="S"
           className="reset-filter-button"
           onClick={() =>
-            issuesFilterDispatch?.({ type: "RESET_FILTER", payload: null })
+            issuesFilterDispatch({ type: "RESET_FILTER", payload: null })
           }>
           <img src={XIcon} alt="검색 필터 정렬 지우기 아이콘" />
           <span>현재의 검색 필터 및 정렬 지우기</span>
