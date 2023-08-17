@@ -15,7 +15,7 @@ export default function IssuesDropdownWrapper() {
   const { data: labelList } = useFetch(getLabels);
   const { data: milestonesList } = useFetch(getMilestones);
 
-  const issuesFilter = useIssuesFilter();
+  const { issuesFilter } = useIssuesFilter();
   const issuesFilterDispatch = useIssuesFilterDispatch();
 
   const userDropdownList: DropdownItemType[] =

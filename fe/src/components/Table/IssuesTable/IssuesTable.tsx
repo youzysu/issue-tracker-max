@@ -23,18 +23,17 @@ import IssuesTableItem from "./IssuesTableItem";
 export default function IssuesTable() {
   const [pageIndex, setPageIndex] = useState(1);
 
-  const issuesFilter = useIssuesFilter();
+  const { issuesFilter } = useIssuesFilter();
   const issuesFilterDispatch = useIssuesFilterDispatch();
 
-  const filterQuery = `${issuesFilter.text}`;
   const { data: issuesList } = useFetch(
     useCallback(
-      () => getIssues(filterQuery, pageIndex),
-      [filterQuery, pageIndex]
+      () => getIssues(issuesFilter.text, pageIndex),
+      [issuesFilter.text, pageIndex]
     )
   );
 
-  const IssuesStatus = issuesFilter.state.status ?? "all";
+  const issuesStatus = issuesFilter.state.status!;
   const openIssuesList = issuesList?.data.filter((issue) => issue.isOpen) || [];
   const closedIssuesList =
     issuesList?.data.filter((issue) => !issue.isOpen) || [];
@@ -44,11 +43,18 @@ export default function IssuesTable() {
     all: issuesList?.data || [],
   };
 
-  const currentTabName = IssuesStatus && TAB_NAME[IssuesStatus];
+  const currentTabName = (issuesStatus: "open" | "closed") => {
+    switch (issuesStatus) {
+      case "open":
+        return "열린 이슈";
+      case "closed":
+        return "닫힌 이슈";
+    }
+  };
 
   const tabBarLeftInfo = {
-    name: TAB_NAME.open,
-    count: openIssuesList.length,
+    name: "열린 이슈",
+    count: issuesList?.pagination.openCounts,
     iconSrc: alertIcon,
     callback: () => {
       issuesFilterDispatch({ type: "SET_FILTER_BAR", payload: "open" });
@@ -56,8 +62,8 @@ export default function IssuesTable() {
   };
 
   const tabBarRightInfo = {
-    name: TAB_NAME.closed,
-    count: closedIssuesList.length,
+    name: "닫힌 이슈",
+    count: issuesList?.pagination.closedCounts,
     iconSrc: archiveIcon,
     callback: () => {
       issuesFilterDispatch({ type: "SET_FILTER_BAR", payload: "closed" });
@@ -84,7 +90,7 @@ export default function IssuesTable() {
             <div className="left-wrapper">
               <InputCheckbox />
               <TabBar
-                currentTabName={currentTabName}
+                currentTabName={currentTabName(issuesStatus)}
                 left={tabBarLeftInfo}
                 right={tabBarRightInfo}
                 borderStyle="none"
@@ -94,9 +100,9 @@ export default function IssuesTable() {
           </TableHeaderContents>
         </TableHeader>
         <TableBody>
-          {currentIssuesList[IssuesStatus].length ? (
+          {currentIssuesList[issuesStatus].length ? (
             <ul>
-              {currentIssuesList[IssuesStatus].map((issue) => (
+              {currentIssuesList[issuesStatus].map((issue) => (
                 <IssuesTableItem key={issue.issueNumber} issue={issue} />
               ))}
             </ul>
@@ -117,12 +123,6 @@ export default function IssuesTable() {
     </TableWrapper>
   );
 }
-
-const TAB_NAME = {
-  open: "열린 이슈",
-  closed: "닫힌 이슈",
-  all: "모든 이슈",
-};
 
 const TableWrapper = styled.div`
   width: 100%;

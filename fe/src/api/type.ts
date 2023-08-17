@@ -23,5 +23,7 @@ export type EditMilestoneBody = {
 export type Pagination = {
   currentPage: number;
   totalCounts: number;
+  openCounts: number;
+  closedCounts: number;
   totalPages: number;
 };

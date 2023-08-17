@@ -4,16 +4,17 @@ import NavigationBar from "@components/NavigationBar";
 import IssuesTable from "@components/Table/IssuesTable/IssuesTable";
 import Button from "@components/common/Button";
 import {
+  INITIAL_FILTER_TEXT,
   useIssuesFilter,
   useIssuesFilterDispatch,
 } from "context/IssuesFilterContext";
 import { styled } from "styled-components";
 
 export default function IssuesPage() {
-  const issuesFilter = useIssuesFilter();
+  const { issuesFilter } = useIssuesFilter();
   const issuesFilterDispatch = useIssuesFilterDispatch();
 
-  const isIssuesFiltered = issuesFilter.text !== "is:open";
+  const isIssuesFiltered = issuesFilter.text !== INITIAL_FILTER_TEXT;
 
   return (
     <StyledIssuesPage>

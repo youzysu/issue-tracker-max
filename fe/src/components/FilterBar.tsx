@@ -3,14 +3,34 @@ import {
   useIssuesFilter,
   useIssuesFilterDispatch,
 } from "context/IssuesFilterContext";
+import { ChangeEvent, useEffect, useState } from "react";
 import { styled } from "styled-components";
 import DropdownIndicator from "./Dropdown/DropdownIndicator";
 import { DropdownItemType } from "./Dropdown/types";
 import RadioGroup from "./common/Group/RadioGroup";
 
 export default function FilterBar() {
-  const issuesFilter = useIssuesFilter();
+  const { issuesFilter } = useIssuesFilter();
   const issuesFilterDispatch = useIssuesFilterDispatch();
+
+  const [userInput, setUserInput] = useState(issuesFilter.text);
+
+  // TODO: useEffect 내부에서 상태 변경하지 않도록 개선
+  useEffect(() => {
+    setUserInput(issuesFilter.text);
+  }, [issuesFilter.text]);
+
+  const onUserInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setUserInput(e.target.value);
+  };
+
+  const onSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    issuesFilterDispatch({
+      type: "SET_FILTER_TEXT",
+      payload: userInput,
+    });
+  };
 
   return (
     <StyledFilterBar>
@@ -34,16 +54,14 @@ export default function FilterBar() {
         </RadioGroup>
       </FilterButtonContainer>
 
-      <FilterForm className="filter-form">
+      <FilterForm className="filter-form" onSubmit={onSubmit}>
         <img src={searchIcon} alt="Search Filter" />
-        {issuesFilter && (
-          <FilterInput
-            type="text"
-            placeholder="Search all issues"
-            value={`is:issue ${issuesFilter.text}`}
-            readOnly
-          />
-        )}
+        <FilterInput
+          type="text"
+          placeholder="Search all issues"
+          value={userInput}
+          onChange={onUserInputChange}
+        />
       </FilterForm>
     </StyledFilterBar>
   );

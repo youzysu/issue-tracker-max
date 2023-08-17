@@ -100,6 +100,11 @@ export type IssuesFilterState = {
   milestone: string | null;
 };
 
+export type IssuesFilter = {
+  state: IssuesFilterState;
+  text: string;
+};
+
 export type IssuesFilterActionMap = {
   SET_STATUS: keyof typeof IssueState | null;
   SET_AUTHOR: string | null;
@@ -108,6 +113,7 @@ export type IssuesFilterActionMap = {
   SET_MILESTONE: string | null;
   SET_FILTER_BAR: keyof typeof IssueFilter | null;
   RESET_FILTER: null;
+  SET_FILTER_TEXT: string;
 };
 
 export type IssuesFilterAction = {
