@@ -40,7 +40,6 @@ export default function IssuesTableHeader({
   const issuesFilterDispatch = useIssuesFilterDispatch();
 
   const issuesStatus = issuesFilter.state.status!;
-  const numSelectedIssues = selectedIssueIds.size;
 
   const tabBarLeftInfo = {
     name: "열린 이슈",
@@ -85,6 +84,8 @@ export default function IssuesTableHeader({
     open: "열린 이슈",
     closed: "닫힌 이슈",
   };
+
+  const numSelectedIssues = selectedIssueIds.size;
 
   return (
     <TableHeader>
