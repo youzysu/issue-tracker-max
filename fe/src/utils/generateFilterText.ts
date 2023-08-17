@@ -17,24 +17,24 @@ export const generateFilterText = (filterState: IssuesFilterState) => {
     filterText.push(filterBarText[filterBar]);
   }
   if (author) {
-    filterText.push(`author:${author}`);
+    filterText.push(`author:"${author}"`);
   }
   if (assignees.size) {
     assignees.has("no")
       ? filterText.push("no:assignee")
       : [...assignees].map((assignee) =>
-          filterText.push(`assignee:${assignee}`)
+          filterText.push(`assignee:"${assignee}"`)
         );
   }
   if (labels.size) {
     labels.has("no")
       ? filterText.push("no:label")
-      : [...labels].map((label) => filterText.push(`label:${label}`));
+      : [...labels].map((label) => filterText.push(`label:"${label}"`));
   }
   if (milestone) {
     milestone === "no"
       ? filterText.push("no:milestone")
-      : filterText.push(`milestone:${milestone}`);
+      : filterText.push(`milestone:"${milestone}"`);
   }
 
   return filterText.join(" ");
