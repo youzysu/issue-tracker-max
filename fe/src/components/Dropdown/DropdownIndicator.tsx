@@ -38,10 +38,6 @@ export default function DropdownIndicator({
     }
   };
 
-  // const onDropdownPanelClick = () => {
-  //   autoClose && setIsOpen(false);
-  // };
-
   return (
     <StyledDropdownIndicator id={`dropdown-indicator-${dropdownName}`}>
       <Button type="button" $isOpen={isOpen} onClick={onDropdownClick}>
