@@ -27,9 +27,7 @@ export default function IssuesPage() {
           variant="ghost"
           size="S"
           className="reset-filter-button"
-          onClick={() =>
-            issuesFilterDispatch({ type: "RESET_FILTER", payload: null })
-          }>
+          onClick={() => issuesFilterDispatch({ type: "RESET_FILTER" })}>
           <img src={XIcon} alt="검색 필터 정렬 지우기 아이콘" />
           <span>현재의 검색 필터 및 정렬 지우기</span>
         </Button>
