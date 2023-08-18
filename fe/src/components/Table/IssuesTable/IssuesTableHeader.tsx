@@ -13,7 +13,7 @@ import {
 import { useState } from "react";
 import { styled } from "styled-components";
 import { TableHeader } from "../Table.style";
-import IssuesDropdownWrapper from "./IssuesDropdownWrapper";
+import IssuesFiltersDropdowns from "./IssuesDropdownWrapper";
 
 export default function IssuesTableHeader({
   numOpen,
@@ -126,7 +126,7 @@ export default function IssuesTableHeader({
               />
             </RadioGroup>
           ) : (
-            <IssuesDropdownWrapper />
+            <IssuesFiltersDropdowns />
           )}
         </div>
       </TableHeaderContents>

@@ -10,7 +10,7 @@ import {
 } from "context/IssuesFilterContext";
 import styled from "styled-components";
 
-export default function IssuesDropdownWrapper() {
+export default function IssuesFiltersDropdowns() {
   const { data: userList } = useFetch(getUsers);
   const { data: labelList } = useFetch(getLabels);
   const { data: milestonesList } = useFetch(getMilestones);

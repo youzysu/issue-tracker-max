@@ -9,7 +9,7 @@ import IssuesTableBody from "./IssuesTableBody";
 import IssuesTableHeader from "./IssuesTableHeader";
 
 export default function IssuesTable() {
-  const [pageIndex, setPageIndex] = useState(1);
+  const [pageNumber, setPageNumber] = useState(1);
   const [selectedIssueIds, setSelectedIssueIds] = useState<Set<number>>(
     new Set()
   );
@@ -17,8 +17,8 @@ export default function IssuesTable() {
   const { issuesFilter } = useIssuesFilter();
   const { data: issuesList, reFetch: refetchIssuesList } = useFetch(
     useCallback(
-      () => getIssues(issuesFilter.text, pageIndex),
-      [issuesFilter.text, pageIndex]
+      () => getIssues(issuesFilter.text, pageNumber),
+      [issuesFilter.text, pageNumber]
     )
   );
 
@@ -56,15 +56,15 @@ export default function IssuesTable() {
   };
 
   const onPageChange = (page: number) => {
-    setPageIndex(page);
+    setPageNumber(page);
   };
 
   const onPrevPageClick = () => {
-    setPageIndex((prev) => prev - 1);
+    setPageNumber((prev) => prev - 1);
   };
 
   const onNextPageClick = () => {
-    setPageIndex((prev) => prev + 1);
+    setPageNumber((prev) => prev + 1);
   };
 
   return (
@@ -95,7 +95,7 @@ export default function IssuesTable() {
       </Table>
       {issuesList && (
         <Pagination
-          currentPage={pageIndex}
+          currentPage={pageNumber}
           totalPages={issuesList.pagination.totalPages}
           {...{ onPageChange, onPrevPageClick, onNextPageClick }}
         />
