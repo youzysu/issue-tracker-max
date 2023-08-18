@@ -19,13 +19,16 @@ export default function Pagination({
     { length: totalPages },
     (_, i) => i + 1
   );
+  const isNextButtonDisabled = currentPage === totalPages || totalPages === 0;
+  const isPrevButtonDisabled = currentPage === 1;
+
   return (
     <StyledPagination>
       <StyledPaginationItem>
         <Button
           variant="ghost"
           size="S"
-          disabled={currentPage === 1}
+          disabled={isPrevButtonDisabled}
           onClick={onPrevPageClick}>
           <img
             src={chevronDown}
@@ -52,7 +55,7 @@ export default function Pagination({
         <Button
           variant="ghost"
           size="S"
-          disabled={currentPage === totalPages}
+          disabled={isNextButtonDisabled}
           onClick={onNextPageClick}>
           <img
             src={chevronDown}
